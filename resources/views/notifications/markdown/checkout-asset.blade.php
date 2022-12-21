@@ -1,5 +1,7 @@
 @component('mail::message')
-# {{ trans('mail.hello') }} {{ $target->present()->fullName() }},
+# {{ trans('mail.titulo_acta') }}
+
+# {{ trans('mail.hello') }} {{ $target->present()->fullName() }}
 
 {{ trans('mail.new_item_checked') }}
 
@@ -8,7 +10,7 @@
 @endif
 
 @component('mail::table')
-|        |          |
+| | |
 | ------------- | ------------- |
 @if ((isset($item->name)) && ($item->name!=''))
 | **{{ trans('mail.asset_name') }}** | {{ $item->name }} |
@@ -38,7 +40,7 @@
 @endif
 @endforeach
 @if ($admin)
-| **{{ trans('general.administrator') }}** | {{ $admin->present()->fullName() }} |
+| **{{ trans('mail.entregado') }}** | {{ $admin->present()->fullName() }} |
 @endif
 @if ($note)
 | **{{ trans('mail.additional_notes') }}** | {{ $note }} |
@@ -50,22 +52,28 @@
 @elseif (($req_accept == 1) && ($eula==''))
 {{ trans('mail.click_on_the_link_asset') }}
 @elseif (($req_accept == 0) && ($eula!=''))
-{{ trans('mail.read_the_terms') }}
+{{-- {{ trans('mail.read_the_terms') }} --}}
+# {{ trans('mail.titulo1') }}
+
+{{ trans('mail.parrafo1') }}
+
+{{ trans('mail.parrafo2') }}
+
+{{ trans('mail.parrafo3') }}
 @endif
 
-@if ($eula)
+{{-- @if ($eula)
 @component('mail::panel')
 {!! $eula !!}
 @endcomponent
-@endif
+@endif --}}
 
-@if ($req_accept == 1)
+{{-- @if ($req_accept == 1)
 **[✔ {{ trans('mail.i_have_read') }}]({{ $accept_url }})**
-@endif
+@endif --}}
+{{-- @if ($req_accept == 1) --}}
 
-
-{{ trans('mail.best_regards') }}
-
+{{-- @endif --}}
 {{ $snipeSettings->site_name }}
 
 @endcomponent
