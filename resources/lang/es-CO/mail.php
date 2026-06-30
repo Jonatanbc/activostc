@@ -70,6 +70,8 @@ return [
     'hello' => 'Hola',
     'hi' => 'Hola',
     'i_have_read' => 'He leído y aceptado los términos de uso, y he recibido este artículo.',
+    'accept_button' => 'Aceptar',
+    'decline_button' => 'Rechazar',
     'initiated_accepted' => 'A checkout you initiated was accepted',
     'initiated_declined' => 'A checkout you initiated was declined',
     'inventory_report' => 'Informe de inventario',
@@ -82,7 +84,7 @@ return [
     'low_inventory_alert' => 'Hay :count elemento que está por debajo del inventario mínimo o que pronto lo estará.|Hay :count elementos que están por debajo del inventario mínimo o que pronto lo estarán.',
     'min_QTY' => 'Cantidad mínima',
     'name' => 'Nombre',
-    'new_item_checked' => 'Se te ha asignado un nuevo artículo. Ver detalles más abajo.|Se te han asignado :count artículos nuevos. Ver detalles más abajo.',
+    'new_item_checked' => 'Con la presente acta se le hace entrega de la siguiente dotación.',
     'new_item_checked_with_acceptance' => 'Se te ha asignado un nuevo artículo que requiere tu aceptación. Ver detalles más abajo.|Se te han asignado :count artículos nuevos que requieren tu aceptación. Ver detalles más abajo.',
     'new_item_checked_location' => 'A new item has been checked out to :location, details are below.|:count new items have been checked out to :location, details are below.',
     'items_checked_out_require_acceptance' => 'The checked out item requires acceptance.|One or more items require acceptance.',
@@ -90,8 +92,11 @@ return [
     'notes' => 'Notas',
     'password' => 'Contraseña',
     'password_reset' => 'Reiniciar la contraseña',
-    'read_the_terms' => 'Por favor lea los términos de uso a continuación.',
-    'read_the_terms_and_click' => 'Please read the terms of use below, and click on the link at the bottom to confirm that you read and agree to the terms of use, and have received the item.',
+    'read_the_terms' => 'El trabajador manifiesta que:
+        La dotación que a aquí se entrega es y será de la empresa en todo momento, en caso de terminación del contrato de trabajo o entrega de una nueva dotación, me comprometo a hacer la devolución de forma inmediata.
+        En caso de daño de la dotación o parte de ella, el trabajador debe devolverla a la empresa.
+        Autorizo expresamente a la empresa mediante este documento a descontar de salarios y liquidación de prestaciones los valores de la dotación cuando en cualquiera de los casos anteriores no la devuelve al empleador',
+    'read_the_terms_and_click' => 'Por favor lea los términos de uso a continuación y use los botones al final para aceptar o rechazar. Al aceptar confirma que leyó y está de acuerdo con los términos, y que recibió el artículo.',
     'click_here_to_review_terms_and_accept_item' => 'Click here to review the terms of use and accept the item|Click here to review the terms of use and accept the items',
     'requested' => 'Solicitado',
     'reset_link' => 'Su enlace de restablecimiento de contraseña',
@@ -117,4 +122,11 @@ return [
     'your_assets' => 'Ver sus activos',
     'your_credentials' => 'Sus credenciales de Snipe-IT',
     'mail_sent' => '¡Correo enviado exitosamente!.',
+    // --- Personalizaciones es-CO (acta de entrega de dotación) — fork activostc ---
+    'entregado' => 'Entregado por',
+    'titulo_acta' => 'ACTA DE ENTREGA DE DOTACION INFORMATICA',
+    'titulo1' => 'EL TRABAJADOR MANIFIESTA QUE:',
+    'parrafo1' => 'La dotación que a aquí se entrega es y será de la empresa en todo momento, en caso de terminación del contrato de trabajo o entrega de una nueva dotación, me comprometo a hacer la devolución de forma inmediata',
+    'parrafo2' => 'En caso de daño de la dotación o parte de ella, el trabajador debe devolverla a la empresa.',
+    'parrafo3' => 'Autorizo expresamente a la empresa mediante este documento a descontar de salarios y liquidación de prestaciones los valores de la dotación cuando en cualquiera de los casos anteriores no la devuelve al empleador',
 ];

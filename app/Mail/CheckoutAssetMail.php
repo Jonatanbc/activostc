@@ -13,6 +13,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\URL;
 
 class CheckoutAssetMail extends BaseMailable
 {
@@ -106,7 +107,16 @@ class CheckoutAssetMail extends BaseMailable
             }
         }
 
-        $accept_url = is_null($this->acceptance) ? null : route('account.accept.item', $this->acceptance);
+        // Signed "magic link" URLs so the assigned user can accept/decline directly from the
+        // email without logging in manually. The signature (HMAC of the APP_KEY) makes the link
+        // tamper-proof and it expires after 30 days. `action` pre-selects accept vs decline.
+        $accept_url = null;
+        $decline_url = null;
+        if (! is_null($this->acceptance)) {
+            $expiration = now()->addDays(7);
+            $accept_url = URL::signedRoute('guest.accept.item', ['acceptance' => $this->acceptance->id, 'action' => 'accepted'], $expiration);
+            $decline_url = URL::signedRoute('guest.accept.item', ['acceptance' => $this->acceptance->id, 'action' => 'declined'], $expiration);
+        }
 
         return new Content(
             markdown: 'mail.markdown.checkout-asset',
@@ -121,6 +131,7 @@ class CheckoutAssetMail extends BaseMailable
                 'eula' => $eula,
                 'req_accept' => $req_accept,
                 'accept_url' => $accept_url,
+                'decline_url' => $decline_url,
                 'last_checkout' => $this->last_checkout,
                 'expected_checkin' => $this->expected_checkin,
                 'introduction_line' => $this->introductionLine(),

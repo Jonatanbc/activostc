@@ -428,6 +428,50 @@ class UsersController extends Controller
     }
 
     /**
+     * Toggle a user's activation status (activate / deactivate).
+     *
+     * Used to disable login for employees who are no longer with the company
+     * without deleting them, preserving their history and assigned assets.
+     * The change is reversible by pressing the button again.
+     *
+     * @since [v8.x]
+     */
+    public function toggleActivated(User $user)
+    {
+        $this->authorize('update', $user);
+
+        // Activation is an auth-related field, so require the same permission used elsewhere to edit it.
+        if (! auth()->user()->can('canEditAuthFields', $user) || ! auth()->user()->can('editableOnDemo')) {
+            return redirect()->back()->with('error', trans('admin/users/message.insufficient_permissions'));
+        }
+
+        // Don't let someone lock themselves out.
+        if (auth()->user()->is($user)) {
+            return redirect()->back()->with('error', trans('admin/users/message.error.cannot_deactivate_yourself'));
+        }
+
+        $user->activated = $user->activated ? 0 : 1;
+
+        // Use forceSave() to bypass full-record model validation: we're only flipping an
+        // administrative flag, and many legacy/imported users (no password, stale manager_id)
+        // would otherwise fail validation and block deactivating a departed employee.
+        if ($user->forceSave()) {
+            $logaction = new Actionlog;
+            $logaction->item_type = User::class;
+            $logaction->item_id = $user->id;
+            $logaction->created_at = date('Y-m-d H:i:s');
+            $logaction->created_by = auth()->id();
+            $logaction->logaction('update');
+
+            return redirect()->back()->with('success', trans($user->activated
+                ? 'admin/users/message.success.activated'
+                : 'admin/users/message.success.deactivated'));
+        }
+
+        return redirect()->back()->with('error', trans('admin/users/message.error.toggle_activated'));
+    }
+
+    /**
      * Return a view with user detail
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]

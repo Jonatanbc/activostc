@@ -79,7 +79,7 @@
                         @endif
                         <div class="col-md-12">
                             <label class="form-control">
-                                <input type="radio" name="asset_acceptance" id="accepted" value="accepted">
+                                <input type="radio" name="asset_acceptance" id="accepted" value="accepted" {{ request('action') === 'accepted' ? 'checked' : '' }}>
                                 @if ($acceptance->qty)
                                     {{trans_choice('general.i_accept_with_count', $acceptance->qty)}}
                                 @else
@@ -87,7 +87,7 @@
                                 @endif
                             </label>
                             <label class="form-control">
-                                <input type="radio" name="asset_acceptance" id="declined" value="declined">
+                                <input type="radio" name="asset_acceptance" id="declined" value="declined" {{ request('action') === 'declined' ? 'checked' : '' }}>
                                 @if ($acceptance->qty)
                                     {{trans_choice('general.i_decline_with_count', $acceptance->qty)}}
                                 @else
@@ -211,6 +211,14 @@
                 $("#submitIcon").removeClass("fa-times").addClass("fa-check");
                 $("#buttonText").text('{{ trans_choice('general.i_accept_item', $acceptance->qty ?? 1) }}');
                 $("#note").prop('required', false);
+            }
+        });
+
+        // If the email's accept/decline button pre-selected an option, reflect it on load.
+        $(function () {
+            var preselected = $('[name="asset_acceptance"]:checked');
+            if (preselected.length) {
+                preselected.trigger('change');
             }
         });
     </script>

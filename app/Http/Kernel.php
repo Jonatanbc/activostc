@@ -14,6 +14,7 @@ use App\Http\Middleware\LogAuthedUserHeader;
 use App\Http\Middleware\NoSessionStore;
 use App\Http\Middleware\PreventBackHistory;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RestrictMagicLinkSession;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetAPIResponseHeaders;
 use App\Http\Middleware\SetPaginationDefaults;
@@ -76,6 +77,7 @@ class Kernel extends HttpKernel
             CreateFreshApiToken::class,
             CheckColorSettings::class,
             AuthenticateSession::class,
+            RestrictMagicLinkSession::class,
             SubstituteBindings::class,
         ],
 

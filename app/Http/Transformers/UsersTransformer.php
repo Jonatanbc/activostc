@@ -105,11 +105,19 @@ class UsersTransformer
             'deleted_at' => ($user->deleted_at) ? Helper::getFormattedDateObject($user->deleted_at, 'datetime') : null,
         ];
 
+        $can_toggle_activation = Gate::allows('update', User::class)
+            && auth()->user()->can('canEditAuthFields', $user)
+            && auth()->user()->can('editableOnDemo')
+            && ($user->deleted_at == '')
+            && ! auth()->user()->is($user);
+
         $permissions_array['available_actions'] = [
             'update' => (Gate::allows('update', User::class) && ($user->deleted_at == '')),
             'delete' => ($user->isDeletable() && (auth()->user()->can('canEditAuthFields', $user) && auth()->user()->can('editableOnDemo'))),
             'clone' => (Gate::allows('create', User::class) && ($user->deleted_at == '')),
             'restore' => (Gate::allows('create', User::class) && ($user->deleted_at != '')),
+            'activate' => ($can_toggle_activation && ! $user->activated),
+            'deactivate' => ($can_toggle_activation && (bool) $user->activated),
         ];
 
         $array += $permissions_array;

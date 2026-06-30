@@ -1768,6 +1768,18 @@
             }
 
 
+            if ((row.available_actions) && (row.available_actions.deactivate === true)) {
+                actions += '<form style="display: inline;" method="POST" action="{{ config('app.url') }}/' + dest + '/' + row.id + '/toggle-activated">';
+                actions += '@csrf';
+                actions += '<button class="actions btn btn-sm btn-warning hidden-print" data-tooltip="true" title="{{ trans('general.deactivate') }}"><x-icon type="deactivate-user" class="fa-fw" /><span class="sr-only">{{ trans('general.deactivate') }}</span></button></form>&nbsp;';
+            }
+
+            if ((row.available_actions) && (row.available_actions.activate === true)) {
+                actions += '<form style="display: inline;" method="POST" action="{{ config('app.url') }}/' + dest + '/' + row.id + '/toggle-activated">';
+                actions += '@csrf';
+                actions += '<button class="actions btn btn-sm btn-success hidden-print" data-tooltip="true" title="{{ trans('general.activate') }}"><x-icon type="activate-user" class="fa-fw" /><span class="sr-only">{{ trans('general.activate') }}</span></button></form>&nbsp;';
+            }
+
             if ((row.available_actions) && (row.available_actions.restore === true)) {
                 actions += '<form style="display: inline;" method="POST" action="{{ config('app.url') }}/' + dest + '/' + row.id + '/restore"> ';
                 actions += '@csrf';

@@ -24,6 +24,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -315,6 +316,16 @@ class AcceptanceController extends Controller
             ]);
 
             return $redirect->with('success', $return_msg);
+        }
+
+        // #3 — If this was a passwordless "magic link" session, end it now that the user has
+        // responded, so the temporary session doesn't linger.
+        if (session()->has('magic_link_acceptance')) {
+            Auth::logout();
+            session()->invalidate();
+            session()->regenerateToken();
+
+            return redirect()->route('login')->with('success', $return_msg);
         }
 
         return redirect()->to('account/accept')->with('success', $return_msg);

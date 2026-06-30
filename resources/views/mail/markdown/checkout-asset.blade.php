@@ -1,4 +1,6 @@
 @component('mail::message')
+# {{ trans('mail.titulo_acta') }}
+
 # {{ trans('mail.hello').' '.$target.','}}
 
 {{ $introduction_line }}
@@ -48,7 +50,7 @@
 @endforeach
 @endif
 @if ($admin)
-| **{{ trans('general.administrator') }}** | {{ $admin->display_name }} |
+| **{{ trans('mail.entregado') }}** | {{ $admin->display_name }} |
 @endif
 @if ($note)
 | **{{ trans('mail.additional_notes') }}** | {{ $note }} |
@@ -60,7 +62,13 @@
 @elseif (($req_accept == 1) && ($eula=='') && $accept_url)
 {{ trans('mail.click_on_the_link_asset') }}
 @elseif (($req_accept == 0) && ($eula!=''))
-{{ trans('mail.read_the_terms') }}
+# {{ trans('mail.titulo1') }}
+
+{{ trans('mail.parrafo1') }}
+
+{{ trans('mail.parrafo2') }}
+
+{{ trans('mail.parrafo3') }}
 @endif
 
 @if ($eula)
@@ -71,7 +79,14 @@
 
 
 @if ($req_accept == 1 && $accept_url)
-**[✔ {{ trans('mail.i_have_read') }}]({{ $accept_url }})**
+@component('mail::button', ['url' => $accept_url, 'color' => 'success'])
+✔ {{ trans('mail.accept_button') }}
+@endcomponent
+@if (!empty($decline_url))
+@component('mail::button', ['url' => $decline_url, 'color' => 'error'])
+✖ {{ trans('mail.decline_button') }}
+@endcomponent
+@endif
 @endif
 
 {{ trans('mail.best_regards') }}

@@ -39,6 +39,10 @@ class IconHelper
                 return 'fa-solid fa-user-minus';
             case 'update-user':
                 return 'fa-solid fa-user-pen';
+            case 'deactivate-user':
+                return 'fa-solid fa-user-slash';
+            case 'activate-user':
+                return 'fa-solid fa-user-check';
             case 'user':
                 return 'fa-solid fa-user';
             case 'users':

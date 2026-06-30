@@ -38,6 +38,12 @@ use App\Models\ReportTemplate;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
+// Passwordless "magic link" for accepting/declining a checkout straight from the email.
+// Protected by Laravel's `signed` middleware (HMAC of APP_KEY) instead of a login.
+Route::get('guest/accept/{acceptance}', [App\Http\Controllers\Account\GuestAcceptanceController::class, 'redirectToAcceptance'])
+    ->name('guest.accept.item')
+    ->middleware([\Illuminate\Routing\Middleware\ValidateSignature::class, 'throttle:10,1']);
+
 Route::group(['middleware' => 'auth'], function () {
     /*
     * Companies

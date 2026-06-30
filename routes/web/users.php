@@ -59,6 +59,14 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
     )->name('users.restore.store')->withTrashed();
 
     Route::post(
+        '{user}/toggle-activated',
+        [
+            Users\UsersController::class,
+            'toggleActivated',
+        ]
+    )->name('users.toggle_activated');
+
+    Route::post(
         '{userId}/password',
         [
             Users\UsersController::class,

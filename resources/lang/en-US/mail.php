@@ -70,6 +70,8 @@ return [
     'hello' => 'Hello',
     'hi' => 'Hi',
     'i_have_read' => 'I have read and agree to the terms of use, and have received this item.',
+    'accept_button' => 'Accept',
+    'decline_button' => 'Decline',
     'initiated_accepted' => 'A checkout you initiated was accepted',
     'initiated_declined' => 'A checkout you initiated was declined',
     'inventory_report' => 'Inventory Report',
