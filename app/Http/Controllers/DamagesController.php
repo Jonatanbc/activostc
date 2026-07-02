@@ -182,6 +182,11 @@ class DamagesController extends Controller
             Storage::disk('public')->makeDirectory($path);
         }
 
+        // Full-resolution phone photos (e.g. 4032x3024) need well over the default
+        // 128M to decode into a GD bitmap; bump the limit so processing doesn't die
+        // mid-request after the damage row was already saved.
+        @ini_set('memory_limit', '512M');
+
         foreach ($request->file('photos') as $photo) {
             if (! $photo) {
                 continue;
@@ -198,7 +203,7 @@ class DamagesController extends Controller
                         $constraint->upsize();
                     })->orientate();
                 Storage::disk('public')->put($path.'/'.$file_name, (string) $upload->encode());
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // Fall back to storing the original if it can't be processed.
                 Log::debug($e);
                 Storage::disk('public')->put($path.'/'.$file_name, file_get_contents($photo));
