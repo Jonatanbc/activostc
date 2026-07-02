@@ -171,6 +171,8 @@ class IconHelper
                 return 'fa-solid fa-timeline';
             case 'more-files':
                 return 'fa-solid fa-laptop-file';
+            case 'damages':
+                return 'fa-solid fa-screwdriver-wrench';
             case 'maintenances':
                 return 'fa-solid fa-screwdriver-wrench';
             case 'seats':

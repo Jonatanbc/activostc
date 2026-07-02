@@ -191,6 +191,13 @@ Route::post('maintenances/{maintenance}/complete',
     [MaintenancesController::class, 'complete']
 )->name('maintenances.complete')->middleware(['auth']);
 
+// Asset Damages
+Route::resource('damages',
+    \App\Http\Controllers\DamagesController::class,
+    ['middleware' => ['auth']]
+)->only(['create', 'store', 'edit', 'update', 'destroy'])
+ ->parameters(['damages' => 'damage']);
+
 Route::get('ht/{any?}',
     [AssetsController::class, 'getAssetByTag'])
     ->where('any', '.*')

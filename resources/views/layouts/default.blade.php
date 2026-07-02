@@ -35,6 +35,26 @@
     {{-- stylesheets --}}
     <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
 
+    {{-- Make table link text blue instead of green, but leave buttons (.btn) with their own (white) text --}}
+    <style>
+        .snipe-table a:not(.btn),
+        table.table a:not(.btn),
+        .table-responsive table a:not(.btn),
+        .bootstrap-table .fixed-table-body table a:not(.btn) {
+            color: #3c8dbc !important;
+        }
+        .snipe-table a:not(.btn):hover,
+        .snipe-table a:not(.btn):focus,
+        table.table a:not(.btn):hover,
+        table.table a:not(.btn):focus,
+        .table-responsive table a:not(.btn):hover,
+        .table-responsive table a:not(.btn):focus,
+        .bootstrap-table .fixed-table-body table a:not(.btn):hover,
+        .bootstrap-table .fixed-table-body table a:not(.btn):focus {
+            color: #337ab7 !important;
+        }
+    </style>
+
     {{-- page level css --}}
     @stack('css')
 
@@ -1801,6 +1821,14 @@
                                         </li>
                                     @endcan
 
+                                    @can('view', \App\Models\DamageType::class)
+                                        <li {{!! (request()->is('damage-types*') ? ' class="active"' : '') !!}}>
+                                            <a href="{{ route('damage-types.index') }}">
+                                                {{ trans('admin/damages/general.damage_types') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+
                                     @can('view', \App\Models\Supplier::class)
                                         <li {{!! (request()->is('suppliers*') ? ' class="active"' : '') !!}}>
                                             <a href="{{ route('suppliers.index') }}">
@@ -1841,6 +1869,21 @@
                                         </li>
                                     @endcan
                                 </ul>
+                            </li>
+                        @endcan
+
+                        @can('view', \App\Models\Asset::class)
+                            <li{!! (request()->is('damages-list') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('damages.list') }}">
+                                    <x-icon type="damages" class="fa-fw" />
+                                    <span>{{ trans('admin/damages/general.all_damages') }}</span>
+                                </a>
+                            </li>
+                            <li{!! (request()->is('purchase-requests*') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('purchase-requests.index') }}">
+                                    <i class="fa-solid fa-file-invoice-dollar fa-fw"></i>
+                                    <span>{{ trans('admin/damages/general.purchase_requests') }}</span>
+                                </a>
                             </li>
                         @endcan
 
@@ -1896,6 +1939,21 @@
                                     <li  {{!! (request()->is('reports/accessories') ? ' class="active"' : '') !!}}>
                                         <a href="{{ url('reports/accessories') }}">
                                             {{ trans('general.accessory_report') }}
+                                        </a>
+                                    </li>
+                                    <li {{!! (request()->is('damages') ? ' class="active"' : '') !!}}>
+                                        <a href="{{ route('reports/damages') }}">
+                                            {{ trans('admin/damages/general.damages_report') }}
+                                        </a>
+                                    </li>
+                                    <li {{!! (request()->is('damages-by-model') ? ' class="active"' : '') !!}}>
+                                        <a href="{{ route('reports/damages_by_model') }}">
+                                            {{ trans('admin/damages/general.damages_by_model_report') }}
+                                        </a>
+                                    </li>
+                                    <li {{!! (request()->is('damages-by-model-summary') ? ' class="active"' : '') !!}}>
+                                        <a href="{{ route('reports/damages_by_model_summary') }}">
+                                            {{ trans('admin/damages/general.damages_by_model_matrix') }}
                                         </a>
                                     </li>
                                 </ul>

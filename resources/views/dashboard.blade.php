@@ -26,121 +26,83 @@
 </div>
 @endif
 
-<div class="row">
+<div class="row modern-stats">
 
-    <!-- panel -->
-    <div class="col-lg-2 col-xs-6">
-        <a href="{{ route('hardware.index') }}">
-            <!-- small hardware box -->
-            <div class="dashboard small-box bg-teal">
-                <div class="inner">
-                    <h3>{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</h3>
-                    <p>{{ trans('general.assets') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="assets" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                    <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- assets -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('hardware.index') }}" class="stat-card stat-assets">
+            <i class="stat-icon fa-solid fa-laptop" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</div>
+            <div class="stat-label">{{ trans('general.assets') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 
-    <div class="col-lg-2 col-xs-6">
-        <a href="{{ route('licenses.index') }}" aria-hidden="true">
-            <!-- small license box -->
-            <div class="dashboard small-box bg-maroon">
-                <div class="inner">
-                    <h3>{{ number_format($counts['license']) }}</h3>
-                    <p>{{ trans('general.licenses') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="licenses" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                    <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- licenses -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('licenses.index') }}" class="stat-card stat-licenses">
+            <i class="stat-icon fa-solid fa-certificate" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format($counts['license']) }}</div>
+            <div class="stat-label">{{ trans('general.licenses') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 
-
-    <div class="col-lg-2 col-xs-6">
-    <!-- small accessories box -->
-        <a href="{{ route('accessories.index') }}">
-            <div class="dashboard small-box bg-orange">
-                <div class="inner">
-                    <h3> {{ number_format($counts['accessory']) }}</h3>
-                    <p>{{ trans('general.accessories') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="accessories" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- accessories -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('accessories.index') }}" class="stat-card stat-accessories">
+            <i class="stat-icon fa-solid fa-keyboard" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format($counts['accessory']) }}</div>
+            <div class="stat-label">{{ trans('general.accessories') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 
-    <div class="col-lg-2 col-xs-6">
-    <!-- small consumables box -->
-        <a href="{{ route('consumables.index') }}">
-            <div class="dashboard small-box bg-purple">
-                <div class="inner">
-                    <h3> {{ number_format($counts['consumable']) }}</h3>
-                    <p>{{ trans('general.consumables') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="consumables" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                    <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- consumables -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('consumables.index') }}" class="stat-card stat-consumables">
+            <i class="stat-icon fa-solid fa-droplet" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format($counts['consumable']) }}</div>
+            <div class="stat-label">{{ trans('general.consumables') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 
-    <div class="col-lg-2 col-xs-6">
-        <!-- small components box -->
-        <a href="{{ route('components.index') }}">
-            <div class="dashboard small-box bg-yellow">
-                <div class="inner">
-                    <h3>{{ number_format($counts['component']) }}</h3>
-                    <p>{{ trans('general.components') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="components" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                    <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- components -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('components.index') }}" class="stat-card stat-components">
+            <i class="stat-icon fa-solid fa-microchip" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format($counts['component']) }}</div>
+            <div class="stat-label">{{ trans('general.components') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 
-    <div class="col-lg-2 col-xs-6">
-        <!-- small users box -->
-        <a href="{{ route('users.index') }}">
-            <div class="dashboard small-box bg-light-blue">
-                <div class="inner">
-                    <h3>{{ number_format($counts['user']) }}</h3>
-                    <p>{{ trans('general.people') }}</p>
-                </div>
-                <div class="icon" aria-hidden="true">
-                    <x-icon type="users" />
-                </div>
-                <span class="small-box-footer">
-                    {{ trans('general.view_all') }}
-                    <x-icon type="arrow-circle-right" />
-                </span>
-            </div>
+    <!-- people -->
+    <div class="col-lg-2 col-sm-4 col-xs-6">
+        <a href="{{ route('users.index') }}" class="stat-card stat-people">
+            <i class="stat-icon fa-solid fa-user-group" aria-hidden="true"></i>
+            <div class="stat-value">{{ number_format($counts['user']) }}</div>
+            <div class="stat-label">{{ trans('general.people') }}</div>
+            <span class="stat-foot">
+                {{ trans('general.view_all') }}
+                <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
         </a>
     </div><!-- ./col -->
 </div>
@@ -501,6 +463,110 @@
 @section('moar_scripts')
 @include ('partials.bootstrap-table', ['simple_view' => true, 'nopages' => true])
 @stop
+
+@push('css')
+<style>
+/* ---- Modern dashboard stat cards ---- */
+.modern-stats { margin-bottom: 6px; }
+
+.stat-card {
+    position: relative;
+    display: block;
+    min-height: 128px;
+    padding: 20px 20px 46px;
+    border-radius: 16px;
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(17, 24, 39, .12);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.stat-card:hover,
+.stat-card:focus {
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-5px);
+    box-shadow: 0 14px 28px rgba(17, 24, 39, .22);
+}
+
+.stat-card .stat-value {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.05;
+    margin-bottom: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .18);
+}
+.stat-card .stat-value,
+.stat-card .stat-label,
+.stat-card .stat-icon,
+.stat-card .stat-foot {
+    color: #fff;
+}
+.stat-card .stat-label {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    opacity: 1;
+}
+.stat-card .stat-icon {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 40px;
+    opacity: 1;
+    transition: transform .18s ease, opacity .18s ease;
+}
+.stat-card:hover .stat-icon {
+    transform: scale(1.12) rotate(-6deg);
+}
+.stat-card .stat-foot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(0, 0, 0, .14);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.stat-card .stat-foot .fa-arrow-right { transition: transform .18s ease; }
+.stat-card:hover .stat-foot .fa-arrow-right { transform: translateX(4px); }
+
+/* Gray gradient palette (dark graphite -> slate) */
+.stat-assets      { background: linear-gradient(135deg, #2c333e 0%, #3b4552 100%); }
+.stat-licenses    { background: linear-gradient(135deg, #343c47 0%, #454f5e 100%); }
+.stat-accessories { background: linear-gradient(135deg, #3c4450 0%, #4d586a 100%); }
+.stat-consumables { background: linear-gradient(135deg, #454e5a 0%, #566475 100%); }
+.stat-components  { background: linear-gradient(135deg, #4d5764 0%, #5f6d7f 100%); }
+.stat-people      { background: linear-gradient(135deg, #566070 0%, #6a7a8c 100%); }
+
+/* Softer, rounded boxes for the rest of the dashboard */
+.content-wrapper .box.box-default {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(17, 24, 39, .08);
+    border-top: none;
+}
+.content-wrapper .box.box-default > .box-header.with-border {
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+}
+
+/* Dark mode */
+[data-theme="dark"] .stat-card { box-shadow: 0 6px 18px rgba(0, 0, 0, .45); }
+[data-theme="dark"] .content-wrapper .box.box-default { box-shadow: 0 4px 14px rgba(0, 0, 0, .40); }
+[data-theme="dark"] .content-wrapper .box.box-default > .box-header.with-border { border-bottom-color: rgba(255, 255, 255, .08); }
+
+@media (max-width: 767px) {
+    .stat-card { min-height: 116px; }
+    .stat-card .stat-value { font-size: 28px; }
+    .stat-card .stat-icon { font-size: 32px; }
+}
+</style>
+@endpush
 
 @push('js')
 

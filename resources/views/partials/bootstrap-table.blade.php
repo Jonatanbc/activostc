@@ -1219,6 +1219,37 @@
             },
         },
     });
+
+    // Toolbar for the Damage Types catalog
+    window.damageTypeButtons = () => ({
+        btnAdd: {
+            text: '{{ trans('general.create') }}',
+            icon: 'fa fa-plus',
+            event () { window.location.href = '{{ route('damage-types.create') }}'; },
+            attributes: { class: 'btn-primary' }
+        },
+    });
+
+    // Toolbar for the asset Damages tab
+    window.damagesButtons = () => ({
+        btnAdd: {
+            text: '{{ trans('admin/damages/general.add_damage') }}',
+            icon: 'fa fa-plus',
+            event () {
+                var createUrl = '{{ route('damages.create', ['asset_id' => (isset($asset)) ? $asset->id : '']) }}';
+                // Open in a modal when the host page supports it; otherwise navigate.
+                if (typeof window.openDamageModal === 'function') {
+                    window.openDamageModal(createUrl + (createUrl.indexOf('?') > -1 ? '&' : '?') + 'modal=1');
+                } else {
+                    window.location.href = createUrl;
+                }
+            },
+            attributes: {
+                class: 'btn-warning',
+                title: '{{ trans('admin/damages/general.add_damage') }}',
+            }
+        },
+    });
     @endcan
 
     @can('create', \App\Models\Category::class)
@@ -1692,6 +1723,18 @@
 
 
 
+    // Thumbnails for the damage photos column (asset Damages tab)
+    window.damagePhotosFormatter = function (value) {
+        if (!value || !value.length) {
+            return '';
+        }
+        return value.map(function (url) {
+            return '<a href="' + url + '" target="_blank" rel="noopener" style="margin-right:4px;display:inline-block;">' +
+                '<img src="' + url + '" style="width:44px;height:44px;object-fit:cover;border-radius:4px;">' +
+                '</a>';
+        }).join('');
+    };
+
     function hardwareAuditFormatter(value, row) {
         return '<a href="{{ config('app.url') }}/hardware/' + row.id + '/audit" class="actions btn btn-sm btn-primary hidden-print" data-tooltip="true" title="{{ trans('general.audit') }}"><x-icon type="audit" /><span class="sr-only">{{ trans('general.audit') }}</span></a>&nbsp;';
     }
@@ -1986,6 +2029,8 @@
         'companies',
         'components',
         'consumables',
+        'damages',
+        'damage-types',
         'departments',
         'depreciations',
         'fieldsets',

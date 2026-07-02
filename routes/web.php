@@ -101,6 +101,58 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('maintenance-types', MaintenanceTypesController::class);
 
     /*
+    * Damage Types (spare-part price list)
+    */
+    Route::resource('damage-types', \App\Http\Controllers\DamageTypesController::class)
+        ->parameters(['damage-types' => 'damageType']);
+
+    /*
+    * Damages module (standalone listing + bulk actions)
+    */
+    Route::get('damages-list', [\App\Http\Controllers\DamagesController::class, 'index'])
+        ->name('damages.list')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/damages/general.all_damages'), route('damages.list')));
+
+    Route::post('damages-list/email', [\App\Http\Controllers\DamagesController::class, 'emailList'])
+        ->name('damages.list.email');
+
+    Route::post('damages-list/schedule', [\App\Http\Controllers\DamagesController::class, 'scheduleList'])
+        ->name('damages.list.schedule');
+
+    Route::delete('damages-list/schedule/{schedule}', [\App\Http\Controllers\DamagesController::class, 'deleteSchedule'])
+        ->name('damages.list.schedule_delete');
+
+    /*
+    * Purchase requests (group damages -> request a quotation)
+    */
+    Route::get('purchase-requests', [\App\Http\Controllers\PurchaseRequestsController::class, 'index'])
+        ->name('purchase-requests.index')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/damages/general.purchase_requests'), route('purchase-requests.index')));
+
+    Route::post('purchase-requests', [\App\Http\Controllers\PurchaseRequestsController::class, 'store'])
+        ->name('purchase-requests.store');
+
+    Route::get('purchase-requests/{purchaseRequest}', [\App\Http\Controllers\PurchaseRequestsController::class, 'show'])
+        ->name('purchase-requests.show')
+        ->breadcrumbs(fn (Trail $trail, $purchaseRequest) => $trail->parent('home')
+            ->push(trans('admin/damages/general.purchase_requests'), route('purchase-requests.index'))
+            ->push($purchaseRequest->reference, route('purchase-requests.show', $purchaseRequest)));
+
+    Route::put('purchase-requests/{purchaseRequest}', [\App\Http\Controllers\PurchaseRequestsController::class, 'update'])
+        ->name('purchase-requests.update');
+
+    Route::delete('purchase-requests/{purchaseRequest}', [\App\Http\Controllers\PurchaseRequestsController::class, 'destroy'])
+        ->name('purchase-requests.destroy');
+
+    Route::delete('purchase-requests/{purchaseRequest}/items/{damage}', [\App\Http\Controllers\PurchaseRequestsController::class, 'removeItem'])
+        ->name('purchase-requests.items.remove');
+
+    Route::get('purchase-requests/{purchaseRequest}/print', [\App\Http\Controllers\PurchaseRequestsController::class, 'print'])
+        ->name('purchase-requests.print');
+
+    /*
     * Depreciations
      */
     Route::resource('depreciations', DepreciationsController::class);
@@ -509,6 +561,33 @@ Route::group(['prefix' => 'reports', 'middleware' => ['auth']], function () {
         ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
             ->push(trans('general.reports'), route('reports.index'))
             ->push(trans('general.asset_maintenance_report'), route('reports/export/maintenances')));
+
+    Route::get('damages', [\App\Http\Controllers\DamagesController::class, 'report'])
+        ->name('reports/damages')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('general.reports'), route('reports.index'))
+            ->push(trans('admin/damages/general.damages_report'), route('reports/damages')));
+
+    Route::get('damages-by-model', [\App\Http\Controllers\DamagesController::class, 'reportByModel'])
+        ->name('reports/damages_by_model')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('general.reports'), route('reports.index'))
+            ->push(trans('admin/damages/general.damages_by_model_report'), route('reports/damages_by_model')));
+
+    Route::get('damages-by-model-summary', [\App\Http\Controllers\DamagesController::class, 'reportByModelMatrix'])
+        ->name('reports/damages_by_model_summary')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('general.reports'), route('reports.index'))
+            ->push(trans('admin/damages/general.damages_by_model_matrix'), route('reports/damages_by_model_summary')));
+
+    Route::post('damages-by-model-summary/email', [\App\Http\Controllers\DamagesController::class, 'emailByModel'])
+        ->name('reports/damages_by_model_email');
+
+    Route::post('damages-by-model-summary/schedule', [\App\Http\Controllers\DamagesController::class, 'scheduleByModel'])
+        ->name('reports/damages_by_model_schedule');
+
+    Route::delete('damages-by-model-summary/schedule/{schedule}', [\App\Http\Controllers\DamagesController::class, 'deleteSchedule'])
+        ->name('reports/damages_by_model_schedule_delete');
 
     Route::get('licenses', [ReportsController::class, 'getLicenseReport'])
         ->name('reports/licenses')

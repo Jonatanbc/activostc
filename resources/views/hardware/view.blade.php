@@ -62,6 +62,7 @@
                     <x-tabs.asset-tab count="{{ $asset->assignedAssets()->AssetsForShow()->count() }}"/>
                     <x-tabs.accessory-tab count="{{ $asset->assignedAccessories()->count() }}"/>
                     <x-tabs.maintenance-tab count="{{ $asset->maintenances->count() }}"/>
+                    <x-tabs.nav-item name="damages" icon_type="damages" label="{{ trans('admin/damages/general.damages') }}" count="{{ $asset->damages->count() }}" tooltip="{{ trans('admin/damages/general.damages') }}"/>
 
                     <x-tabs.nav-item
                         name="audits"
@@ -396,6 +397,23 @@
                     </x-tabs.pane>
                     <!-- end maintenances tab pane -->
 
+                    <!-- start damages tab pane -->
+                    <x-tabs.pane name="damages">
+
+                        <x-slot:table_header>
+                            {{ trans('admin/damages/general.damages') }}
+                        </x-slot:table_header>
+
+                        <x-table
+                            name="assetDamages"
+                            buttons="damagesButtons"
+                            api_url="{{ route('api.damages.index', array('asset_id' => $asset->id)) }}"
+                            :presenter="\App\Presenters\DamagesPresenter::dataTableLayout()"
+                            export_filename="export-damages-{{ str_slug($asset->name) }}-{{ date('Y-m-d') }}"
+                        />
+                    </x-tabs.pane>
+                    <!-- end damages tab pane -->
+
                     <!-- start audits tab pane -->
                     <x-tabs.pane name="audits">
                         <x-table.history
@@ -480,6 +498,9 @@
         @include ('modals.add-note', ['type' => 'asset', 'id' => $asset->id])
     @endcan
         @include ('partials.bootstrap-table')
+        @can('update', $asset)
+            @include ('partials.damage-modal')
+        @endcan
     @endsection
 
 @stop

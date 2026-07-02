@@ -1003,6 +1003,15 @@ class Asset extends Depreciable
     }
 
     /**
+     * Get damage records for this asset.
+     */
+    public function damages()
+    {
+        return $this->hasMany(AssetDamage::class, 'asset_id')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
      * Establishes the asset -> status relationship
      *
      * @author [A. Gianotto] [<snipe@snipe.net>]

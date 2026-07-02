@@ -11,6 +11,7 @@ use App\Models\Component;
 use App\Models\Consumable;
 use App\Models\CustomField;
 use App\Models\CustomFieldset;
+use App\Models\DamageType;
 use App\Models\Department;
 use App\Models\Depreciation;
 use App\Models\License;
@@ -31,6 +32,7 @@ use App\Policies\ComponentPolicy;
 use App\Policies\ConsumablePolicy;
 use App\Policies\CustomFieldPolicy;
 use App\Policies\CustomFieldsetPolicy;
+use App\Policies\DamageTypePolicy;
 use App\Policies\DepartmentPolicy;
 use App\Policies\DepreciationPolicy;
 use App\Policies\LicensePolicy;
@@ -66,6 +68,7 @@ class AuthServiceProvider extends ServiceProvider
         Category::class => CategoryPolicy::class,
         Component::class => ComponentPolicy::class,
         Consumable::class => ConsumablePolicy::class,
+        DamageType::class => DamageTypePolicy::class,
         CustomField::class => CustomFieldPolicy::class,
         CustomFieldset::class => CustomFieldsetPolicy::class,
         Department::class => DepartmentPolicy::class,

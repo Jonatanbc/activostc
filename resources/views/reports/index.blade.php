@@ -60,6 +60,24 @@
             </a>
         </div>
 
+        <div class="col-md-3 col-sm-6">
+            <a href="{{ route('reports/damages') }}" class="btn btn-theme btn-block" style="margin-bottom: 10px; white-space: normal;">
+                <x-icon type="damages"/> {{ trans('admin/damages/general.damages_report') }}
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <a href="{{ route('reports/damages_by_model') }}" class="btn btn-theme btn-block" style="margin-bottom: 10px; white-space: normal;">
+                <x-icon type="damages"/> {{ trans('admin/damages/general.damages_by_model_report') }}
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <a href="{{ route('reports/damages_by_model_summary') }}" class="btn btn-theme btn-block" style="margin-bottom: 10px; white-space: normal;">
+                <x-icon type="damages"/> {{ trans('admin/damages/general.damages_by_model_matrix') }}
+            </a>
+        </div>
+
     </div>
 
 

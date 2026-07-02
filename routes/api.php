@@ -652,6 +652,25 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
     ); // end assets API routes
 
     /**
+     * Asset damages API routes
+     */
+    Route::get('/damages/by-model',
+        [Api\DamagesController::class, 'byModel']
+    )->name('api.damages.bymodel');
+
+    Route::get('/damages',
+        [Api\DamagesController::class, 'index']
+    )->name('api.damages.index');
+
+    Route::get('/damages/{damage}',
+        [Api\DamagesController::class, 'show']
+    )->name('api.damages.show');
+
+    Route::delete('/damages/{damage}',
+        [Api\DamagesController::class, 'destroy']
+    )->name('api.damages.destroy');
+
+    /**
      * Maintenance types API routes
      */
     Route::resource('maintenance-types',
@@ -665,6 +684,27 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
         ],
             'except' => ['create', 'edit'],
             'parameters' => ['maintenance-type' => 'maintenanceType'],
+        ]
+    );
+
+    /**
+     * Damage types API routes
+     */
+    Route::get('damage-types/selectlist',
+        [Api\DamageTypesController::class, 'selectlist']
+    )->name('api.damage-types.selectlist');
+
+    Route::resource('damage-types',
+        Api\DamageTypesController::class,
+        ['names' => [
+            'index' => 'api.damage-types.index',
+            'show' => 'api.damage-types.show',
+            'store' => 'api.damage-types.store',
+            'update' => 'api.damage-types.update',
+            'destroy' => 'api.damage-types.destroy',
+        ],
+            'except' => ['create', 'edit'],
+            'parameters' => ['damage-type' => 'damageType'],
         ]
     );
 
