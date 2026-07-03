@@ -100,15 +100,20 @@
                                     <td><span class="label {{ $labelClass }}">{{ trans('admin/damages/general.estado_'.$row['estado']) }}</span></td>
                                     <td>{{ optional($asset->location)->name ?: '—' }}</td>
                                     <td>
+                                        @php $gallery = 'avail-'.$asset->id; @endphp
                                         <div class="avail-photos">
                                             @if ($row['asset_photo'])
-                                                <a href="{{ $row['asset_photo'] }}" target="_blank" rel="noopener" class="avail-photo pc" title="{{ trans('general.image') }}">
+                                                <a href="{{ $row['asset_photo'] }}" data-toggle="lightbox" data-gallery="{{ $gallery }}"
+                                                   data-title="{{ trans('general.image') }} · {{ $asset->asset_tag }}"
+                                                   class="avail-photo pc" title="{{ trans('general.image') }}">
                                                     <img src="{{ $row['asset_photo'] }}" alt="">
                                                     <span class="avail-photo-tag"><i class="fa-solid fa-laptop"></i></span>
                                                 </a>
                                             @endif
                                             @foreach ($row['damage_photos'] as $purl)
-                                                <a href="{{ $purl }}" target="_blank" rel="noopener" class="avail-photo dmg" title="{{ trans('admin/damages/general.photos') }}">
+                                                <a href="{{ $purl }}" data-toggle="lightbox" data-gallery="{{ $gallery }}"
+                                                   data-title="{{ trans('admin/damages/general.photos') }} · {{ $asset->asset_tag }}"
+                                                   class="avail-photo dmg" title="{{ trans('admin/damages/general.photos') }}">
                                                     <img src="{{ $purl }}" alt="">
                                                     <span class="avail-photo-tag"><i class="fa-solid fa-wrench"></i></span>
                                                 </a>
