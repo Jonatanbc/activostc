@@ -56,6 +56,7 @@ return [
     'availability_help' => 'Unassigned assets in IT inventory. A damaged critical component marks the unit as Critical; only non-critical damage marks it With damage.',
     'critical_component' => 'Critical component',
     'critical_component_hint' => 'If damaged, the equipment becomes unusable (marks the unit as Critical).',
+    'photos_col' => 'Photos',
     'availability' => 'Availability',
     'component_status' => 'Component status',
     'repair_cost' => 'Repair cost',

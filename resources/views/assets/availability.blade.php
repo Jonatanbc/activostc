@@ -59,6 +59,7 @@
                                 <th style="min-width:160px;">{{ trans('admin/damages/general.availability') }}</th>
                                 <th>{{ trans('admin/damages/table.status') }}</th>
                                 <th>{{ trans('general.location') }}</th>
+                                <th style="min-width:130px;">{{ trans('admin/damages/general.photos_col') }}</th>
                                 <th class="text-right">{{ trans('admin/damages/general.repair_cost') }}</th>
                             </tr>
                         </thead>
@@ -98,12 +99,31 @@
                                     </td>
                                     <td><span class="label {{ $labelClass }}">{{ trans('admin/damages/general.estado_'.$row['estado']) }}</span></td>
                                     <td>{{ optional($asset->location)->name ?: '—' }}</td>
+                                    <td>
+                                        <div class="avail-photos">
+                                            @if ($row['asset_photo'])
+                                                <a href="{{ $row['asset_photo'] }}" target="_blank" rel="noopener" class="avail-photo pc" title="{{ trans('general.image') }}">
+                                                    <img src="{{ $row['asset_photo'] }}" alt="">
+                                                    <span class="avail-photo-tag"><i class="fa-solid fa-laptop"></i></span>
+                                                </a>
+                                            @endif
+                                            @foreach ($row['damage_photos'] as $purl)
+                                                <a href="{{ $purl }}" target="_blank" rel="noopener" class="avail-photo dmg" title="{{ trans('admin/damages/general.photos') }}">
+                                                    <img src="{{ $purl }}" alt="">
+                                                    <span class="avail-photo-tag"><i class="fa-solid fa-wrench"></i></span>
+                                                </a>
+                                            @endforeach
+                                            @if (! $row['asset_photo'] && empty($row['damage_photos']))
+                                                <span class="text-muted">—</span>
+                                            @endif
+                                        </div>
+                                    </td>
                                     <td class="text-right">
                                         {{ $row['repair_cost'] > 0 ? \App\Helpers\Helper::formatCurrencyOutput($row['repair_cost']) : '—' }}
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="8" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
+                                <tr><td colspan="9" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -138,6 +158,12 @@
 .avail-bar-wrap .progress { flex: 1 1 auto; height: 12px; margin: 0; border-radius: 7px; background: #eef1f5; box-shadow: none; }
 .avail-bar-wrap .progress-bar { border-radius: 7px; transition: width .4s ease; }
 .avail-pct { flex: 0 0 auto; font-weight: 700; font-size: 12.5px; color: #4a5568; min-width: 34px; text-align: right; }
+.avail-photos { display: flex; flex-wrap: wrap; gap: 5px; }
+.avail-photo { position: relative; display: block; width: 38px; height: 38px; border-radius: 7px; overflow: hidden; border: 1px solid #e0e5ec; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.avail-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.avail-photo-tag { position: absolute; bottom: 0; right: 0; background: rgba(17,24,39,.72); color: #fff; font-size: 8px; padding: 1px 4px 1px 3px; border-top-left-radius: 5px; line-height: 1.4; }
+.avail-photo.dmg .avail-photo-tag { background: rgba(201,48,44,.85); }
+.avail-photo.pc { border-color: #b8c6d6; }
 [data-theme="dark"] .avail-card { background: #2b303a; border-color: #3d4756; }
 [data-theme="dark"] .avail-card-num { color: #e5e9ef; }
 [data-theme="dark"] .avail-bar-wrap .progress { background: #333a45; }

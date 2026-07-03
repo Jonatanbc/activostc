@@ -39,7 +39,7 @@ class AssetAvailabilityController extends Controller
             ->get();
 
         // Pending (unrepaired) damages for those assets, grouped by asset.
-        $damages = AssetDamage::with('damageType')
+        $damages = AssetDamage::with(['damageType', 'images'])
             ->whereIn('asset_id', $assets->pluck('id'))
             ->where('status', '!=', AssetDamage::STATUS_REPAIRED)
             ->get()
@@ -74,6 +74,12 @@ class AssetAvailabilityController extends Controller
                 $estado = 'with_damage';
             }
 
+            // Current asset photo + every photo uploaded on its damages.
+            $assetPhoto = $asset->present()->imageSrc() ?: null;
+            $damagePhotos = $assetDamages->flatMap(fn ($d) => $d->images)
+                ->map(fn ($img) => $img->url)
+                ->values()->all();
+
             return [
                 'asset' => $asset,
                 'availability' => $availability,
@@ -82,6 +88,8 @@ class AssetAvailabilityController extends Controller
                 'critical_type_ids' => $damagedCritIds->all(),
                 'repair_cost' => (float) $assetDamages->sum('cost'),
                 'damage_count' => $assetDamages->count(),
+                'asset_photo' => $assetPhoto,
+                'damage_photos' => $damagePhotos,
             ];
         });
 

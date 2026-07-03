@@ -56,6 +56,7 @@ return [
     'availability_help' => 'Equipos sin asignar en inventario TI. Si un componente crítico está dañado el equipo queda como Crítico; si solo hay daños no críticos, Con averías.',
     'critical_component' => 'Componente crítico',
     'critical_component_hint' => 'Si se daña, el equipo queda inutilizable (marca el equipo como Crítico).',
+    'photos_col' => 'Fotos',
     'availability' => 'Disponibilidad',
     'component_status' => 'Estado por componente',
     'repair_cost' => 'Costo reparación',
