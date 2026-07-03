@@ -132,6 +132,23 @@ Route::group(['middleware' => 'auth'], function () {
             ->push(trans('admin/damages/general.availability_module'), route('assets.availability')));
 
     /*
+    * Asset assignment requests (questionnaire from the availability module -> IT review)
+    */
+    Route::post('equipos-disponibilidad/solicitar', [\App\Http\Controllers\AssetRequestController::class, 'store'])
+        ->name('assets.request.store');
+
+    Route::get('solicitudes-equipos', [\App\Http\Controllers\AssetRequestController::class, 'index'])
+        ->name('assets.requests')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/damages/general.requests_module'), route('assets.requests')));
+
+    Route::patch('solicitudes-equipos/{assetRequest}/estado', [\App\Http\Controllers\AssetRequestController::class, 'updateStatus'])
+        ->name('assets.requests.status');
+
+    Route::delete('solicitudes-equipos/{assetRequest}', [\App\Http\Controllers\AssetRequestController::class, 'destroy'])
+        ->name('assets.requests.destroy');
+
+    /*
     * Purchase requests (group damages -> request a quotation)
     */
     Route::get('purchase-requests', [\App\Http\Controllers\PurchaseRequestsController::class, 'index'])

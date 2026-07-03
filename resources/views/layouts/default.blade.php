@@ -1879,6 +1879,12 @@
                                     <span>{{ trans('admin/damages/general.availability_module') }}</span>
                                 </a>
                             </li>
+                            <li{!! (request()->is('solicitudes-equipos') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('assets.requests') }}">
+                                    <i class="fa-solid fa-hand-point-up fa-fw"></i>
+                                    <span>{{ trans('admin/damages/general.requests_module') }}</span>
+                                </a>
+                            </li>
                             <li{!! (request()->is('damages-list') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('damages.list') }}">
                                     <x-icon type="damages" class="fa-fw" />

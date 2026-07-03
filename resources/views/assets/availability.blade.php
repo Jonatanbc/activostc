@@ -61,6 +61,7 @@
                                 <th>{{ trans('general.location') }}</th>
                                 <th style="min-width:130px;">{{ trans('admin/damages/general.photos_col') }}</th>
                                 <th class="text-right">{{ trans('admin/damages/general.repair_cost') }}</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -126,15 +127,83 @@
                                     <td class="text-right">
                                         {{ $row['repair_cost'] > 0 ? \App\Helpers\Helper::formatCurrencyOutput($row['repair_cost']) : '—' }}
                                     </td>
+                                    <td class="text-right">
+                                        <button type="button" class="btn btn-primary btn-xs js-request"
+                                                data-asset-id="{{ $asset->id }}"
+                                                data-asset-name="{{ ($asset->asset_tag ? $asset->asset_tag.' · ' : '').(optional($asset->model)->name ?: $asset->name) }}">
+                                            <i class="fa-solid fa-hand-point-up"></i> {{ trans('admin/damages/general.request_button') }}
+                                        </button>
+                                    </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="9" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
+                                <tr><td colspan="10" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+{{-- Request questionnaire modal --}}
+<div class="modal fade" id="requestModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form method="post" action="{{ route('assets.request.store') }}" class="modal-content">
+            {{ csrf_field() }}
+            <input type="hidden" name="asset_id" id="req_asset_id">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><i class="fa-solid fa-hand-point-up"></i> {{ trans('admin/damages/general.request_title') }}</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted" style="margin-top:-4px;"><strong id="req_asset_name"></strong></p>
+
+                <div class="form-group">
+                    <label for="assignee_name">{{ trans('admin/damages/general.assignee_name') }} <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="assignee_name" name="assignee_name" required>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="assignee_id_number">{{ trans('admin/damages/general.assignee_id_number') }}</label>
+                        <input type="text" class="form-control" id="assignee_id_number" name="assignee_id_number">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="assignee_position">{{ trans('admin/damages/general.assignee_position') }}</label>
+                        <input type="text" class="form-control" id="assignee_position" name="assignee_position">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label for="assignee_location">{{ trans('admin/damages/general.assignee_location') }}</label>
+                        <input type="text" class="form-control" id="assignee_location" name="assignee_location">
+                    </div>
+                    <div class="col-sm-6 form-group">
+                        <label for="needed_at">{{ trans('admin/damages/general.needed_at') }}</label>
+                        <input type="date" class="form-control" id="needed_at" name="needed_at">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ trans('admin/damages/general.account_type') }}</label>
+                    <div>
+                        <label class="radio-inline"><input type="radio" name="account_type" value="nueva" checked> {{ trans('admin/damages/general.account_new') }}</label>
+                        <label class="radio-inline"><input type="radio" name="account_type" value="reemplazo"> {{ trans('admin/damages/general.account_replacement') }}</label>
+                    </div>
+                </div>
+                <div class="form-group" id="replaces_wrap" style="display:none;">
+                    <label for="replaces_person">{{ trans('admin/damages/general.replaces_person') }}</label>
+                    <input type="text" class="form-control" id="replaces_person" name="replaces_person">
+                </div>
+                <div class="form-group">
+                    <label for="justification">{{ trans('admin/damages/general.justification') }}</label>
+                    <textarea class="form-control" id="justification" name="justification" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link text-muted" data-dismiss="modal">{{ trans('general.cancel') }}</button>
+                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> {{ trans('admin/damages/general.request_button') }}</button>
+            </div>
+        </form>
     </div>
 </div>
 @stop
@@ -187,6 +256,30 @@
                 row.style.display = (!q || row.getAttribute('data-search').indexOf(q) > -1) ? '' : 'none';
             });
         });
+    })();
+
+    // Request questionnaire modal
+    (function () {
+        var modal = document.getElementById('requestModal');
+        if (!modal) return;
+
+        document.querySelectorAll('.js-request').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.getElementById('req_asset_id').value = btn.getAttribute('data-asset-id');
+                document.getElementById('req_asset_name').textContent = btn.getAttribute('data-asset-name');
+                $('#requestModal').modal('show');
+            });
+        });
+
+        // Show "replaces whom?" only for a replacement account.
+        function toggleReplaces() {
+            var val = modal.querySelector('input[name="account_type"]:checked');
+            document.getElementById('replaces_wrap').style.display = (val && val.value === 'reemplazo') ? '' : 'none';
+        }
+        modal.querySelectorAll('input[name="account_type"]').forEach(function (r) {
+            r.addEventListener('change', toggleReplaces);
+        });
+        toggleReplaces();
     })();
 </script>
 @stop
