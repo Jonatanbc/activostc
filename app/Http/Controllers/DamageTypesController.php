@@ -32,6 +32,7 @@ class DamageTypesController extends Controller
         $type->default_cost = $request->input('default_cost');
         $type->category_id = $request->input('category_id') ?: null;
         $type->notes = $request->input('notes');
+        $type->is_critical = $request->boolean('is_critical');
         $type->created_by = auth()->id();
 
         if ($type->save()) {
@@ -57,6 +58,7 @@ class DamageTypesController extends Controller
         $damageType->default_cost = $request->input('default_cost');
         $damageType->category_id = $request->input('category_id') ?: null;
         $damageType->notes = $request->input('notes');
+        $damageType->is_critical = $request->boolean('is_critical');
 
         if ($damageType->save()) {
             return redirect()->route('damage-types.index')

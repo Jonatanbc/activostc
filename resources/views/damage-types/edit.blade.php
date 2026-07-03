@@ -43,6 +43,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="is_critical" class="col-md-3 control-label">{{ trans('admin/damages/general.critical_component') }}</label>
+                    <div class="col-md-7">
+                        <label class="checkbox-inline" style="padding-top:6px;">
+                            <input type="checkbox" name="is_critical" id="is_critical" value="1" {{ old('is_critical', $item->is_critical) ? 'checked' : '' }}>
+                            {{ trans('admin/damages/general.critical_component_hint') }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="category_id" class="col-md-3 control-label">{{ trans('general.category') }}</label>
                     <div class="col-md-7">
                         <select name="category_id" id="category_id" class="form-control select2">

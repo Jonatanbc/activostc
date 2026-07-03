@@ -124,6 +124,14 @@ Route::group(['middleware' => 'auth'], function () {
         ->name('damages.list.schedule_delete');
 
     /*
+    * Assignable equipment availability (RTD assets + cost-weighted health bar)
+    */
+    Route::get('equipos-disponibilidad', [\App\Http\Controllers\AssetAvailabilityController::class, 'index'])
+        ->name('assets.availability')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/damages/general.availability_module'), route('assets.availability')));
+
+    /*
     * Purchase requests (group damages -> request a quotation)
     */
     Route::get('purchase-requests', [\App\Http\Controllers\PurchaseRequestsController::class, 'index'])

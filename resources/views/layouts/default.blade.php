@@ -1873,6 +1873,12 @@
                         @endcan
 
                         @can('view', \App\Models\Asset::class)
+                            <li{!! (request()->is('equipos-disponibilidad') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('assets.availability') }}">
+                                    <i class="fa-solid fa-heart-pulse fa-fw"></i>
+                                    <span>{{ trans('admin/damages/general.availability_module') }}</span>
+                                </a>
+                            </li>
                             <li{!! (request()->is('damages-list') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('damages.list') }}">
                                     <x-icon type="damages" class="fa-fw" />

@@ -28,7 +28,11 @@ class DamageType extends SnipeModel
 
     protected $injectUniqueIdentifier = true;
 
-    protected $fillable = ['name', 'default_cost', 'category_id', 'notes'];
+    protected $fillable = ['name', 'default_cost', 'category_id', 'notes', 'is_critical'];
+
+    protected $casts = [
+        'is_critical' => 'boolean',
+    ];
 
     public function setDefaultCostAttribute($value)
     {
