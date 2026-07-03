@@ -67,43 +67,64 @@ class DamagesController extends Controller
         $this->authorize('update', Asset::class);
 
         $request->validate([
-            'photos' => 'nullable|array|max:10',
-            'photos.*' => 'nullable|mimes:png,gif,jpg,jpeg,webp,bmp|max:8192',
+            'asset_id' => 'required|integer|exists:assets,id',
+            'types' => 'required|array|min:1',
+            'types.*' => 'integer|distinct|exists:damage_types,id',
+            'quantity.*' => 'nullable|integer|min:1',
+            'photos.*' => 'nullable|array|max:10',
+            'photos.*.*' => 'nullable|mimes:png,gif,jpg,jpeg,webp,bmp|max:8192',
         ]);
 
-        $damage = new AssetDamage;
-        $damage->asset_id = $request->input('asset_id');
-        $damage->damage_type_id = $request->input('damage_type_id');
-        $damage->quantity = (int) $request->input('quantity', 1);
+        $asset_id = $request->input('asset_id');
+
+        // One damage record is created per checked damage type, each with its own
+        // quantity, cost and photos; the rest of the fields are shared.
+        foreach ($request->input('types') as $typeId) {
+            $damage = $this->fillDamage(new AssetDamage, $request, (int) $typeId, true);
+            $damage->asset_id = $asset_id;
+
+            if ($damage->save()) {
+                $this->storeDamagePhotos($damage, $request->file("photos.$typeId"));
+            }
+        }
+
+        if ($request->boolean('modal')) {
+            return view('damages.modal-done');
+        }
+
+        return redirect()->route('hardware.show', $asset_id)
+            ->with('success', trans('admin/damages/message.create.success'));
+    }
+
+    /**
+     * Populate a damage record from the multi-type form: per-type quantity/cost
+     * plus the fields shared across every type in the same report.
+     */
+    private function fillDamage(AssetDamage $damage, Request $request, int $typeId, bool $isNew): AssetDamage
+    {
+        $damage->damage_type_id = $typeId;
+        $damage->quantity = (int) ($request->input("quantity.$typeId") ?: 1);
         $damage->status = $request->input('status', AssetDamage::STATUS_REPORTED);
         $damage->supplier_id = $request->input('supplier_id') ?: null;
         $damage->erp_purchase_code = $request->input('erp_purchase_code') ?: null;
-        $damage->reported_by = auth()->id();
         $damage->reported_at = $request->input('reported_at') ?: now()->format('Y-m-d');
         $damage->repaired_at = $request->input('repaired_at') ?: null;
         $damage->notes = $request->input('notes');
-        $damage->created_by = auth()->id();
+
+        if ($isNew) {
+            $damage->reported_by = auth()->id();
+            $damage->created_by = auth()->id();
+        }
 
         // Cost defaults to (standard cost x quantity) when left blank, otherwise the real quote.
-        $cost = $request->input('cost');
+        $cost = $request->input("cost.$typeId");
         if ($cost === null || $cost === '') {
-            $type = DamageType::find($damage->damage_type_id);
+            $type = DamageType::find($typeId);
             $cost = $type && $type->default_cost ? $type->default_cost * $damage->quantity : null;
         }
         $damage->cost = $cost;
 
-        if ($damage->save()) {
-            $this->handleDamagePhotos($request, $damage);
-
-            if ($request->boolean('modal')) {
-                return view('damages.modal-done');
-            }
-
-            return redirect()->route('hardware.show', $damage->asset_id)
-                ->with('success', trans('admin/damages/message.create.success'));
-        }
-
-        return redirect()->back()->withInput()->withErrors($damage->getErrors());
+        return $damage;
     }
 
     public function edit(AssetDamage $damage)
@@ -122,23 +143,32 @@ class DamagesController extends Controller
         $this->authorize('update', Asset::class);
 
         $request->validate([
-            'photos' => 'nullable|array|max:10',
-            'photos.*' => 'nullable|mimes:png,gif,jpg,jpeg,webp,bmp|max:8192',
+            'types' => 'nullable|array',
+            'types.*' => 'integer|distinct|exists:damage_types,id',
+            'quantity.*' => 'nullable|integer|min:1',
+            'photos.*' => 'nullable|array|max:10',
+            'photos.*.*' => 'nullable|mimes:png,gif,jpg,jpeg,webp,bmp|max:8192',
         ]);
 
-        $damage->damage_type_id = $request->input('damage_type_id');
-        $damage->quantity = (int) $request->input('quantity', 1);
-        $damage->cost = $request->input('cost');
-        $damage->status = $request->input('status');
-        $damage->supplier_id = $request->input('supplier_id') ?: null;
-        $damage->erp_purchase_code = $request->input('erp_purchase_code') ?: null;
-        $damage->reported_at = $request->input('reported_at') ?: null;
-        $damage->repaired_at = $request->input('repaired_at') ?: null;
-        $damage->notes = $request->input('notes');
+        // The record being edited keeps its type; its row drives quantity/cost/photos.
+        $primary = $damage->damage_type_id;
+        $this->fillDamage($damage, $request, $primary, false);
 
         if ($damage->save()) {
             $this->deleteDamagePhotos($request, $damage);
-            $this->handleDamagePhotos($request, $damage);
+            $this->storeDamagePhotos($damage, $request->file("photos.$primary"));
+
+            // Any extra types checked while editing are added as new damage records.
+            foreach ((array) $request->input('types', []) as $typeId) {
+                if ((int) $typeId === (int) $primary) {
+                    continue;
+                }
+                $new = $this->fillDamage(new AssetDamage, $request, (int) $typeId, true);
+                $new->asset_id = $damage->asset_id;
+                if ($new->save()) {
+                    $this->storeDamagePhotos($new, $request->file("photos.$typeId"));
+                }
+            }
 
             if ($request->boolean('modal')) {
                 return view('damages.modal-done');
@@ -169,11 +199,13 @@ class DamagesController extends Controller
     }
 
     /**
-     * Store any uploaded photos for a damage record (resized, on the public disk).
+     * Store the uploaded photos for a single damage record (resized, on the public
+     * disk). $photos is the per-type file bag (photos[typeId][]) from the request.
      */
-    private function handleDamagePhotos(Request $request, AssetDamage $damage): void
+    private function storeDamagePhotos(AssetDamage $damage, $photos): void
     {
-        if (! $request->hasFile('photos')) {
+        $photos = array_filter(is_array($photos) ? $photos : [$photos]);
+        if (empty($photos)) {
             return;
         }
 
@@ -187,7 +219,7 @@ class DamagesController extends Controller
         // mid-request after the damage row was already saved.
         @ini_set('memory_limit', '512M');
 
-        foreach ($request->file('photos') as $photo) {
+        foreach ($photos as $photo) {
             if (! $photo) {
                 continue;
             }
