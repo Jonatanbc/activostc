@@ -72,7 +72,7 @@
             --main-footer-bg-color: light-dark(#ffffff,#3d4144);
             --main-footer-text-color: light-dark(#605e5e, #d2d6de);
             --main-footer-top-border-color: light-dark(#d2d6de,#605e5e);
-            --main-theme-color: #0f7d8e; /* azul turquí — reemplaza el negro de header_color */
+            --main-theme-color: #3378ad; /* azul medio de la paleta — reemplaza el negro de header_color */
             --nav-hover-text-color: {{ $nav_link_color ?? 'hsl(from var(--main-theme-color) h s calc(l - 10))' }};
             --nav-primary-text-color: {{ $nav_link_color ?? '#ffffff' }};
             --search-highlight: #e9d15b;
@@ -212,18 +212,18 @@
             color: var(--nav-primary-text-color) !important;
         }
 
-        /* Primary buttons follow the turquoise theme (were AdminLTE blue) */
+        /* Primary (CTA) buttons use the vivid blue from the palette */
         .btn-primary {
-            background-color: var(--main-theme-color) !important;
-            border-color: hsl(from var(--main-theme-color) h s calc(l - 8)) !important;
+            background-color: #284eee !important;
+            border-color: #1f3fcf !important;
         }
         .btn-primary:hover,
         .btn-primary:focus,
         .btn-primary:active,
         .btn-primary.active,
         .open > .dropdown-toggle.btn-primary {
-            background-color: var(--main-theme-hover) !important;
-            border-color: hsl(from var(--main-theme-color) h s calc(l - 14)) !important;
+            background-color: #1f3fcf !important;
+            border-color: #1a36b0 !important;
         }
 
 
@@ -739,8 +739,14 @@
          */
 
         .main-sidebar {
-            background: linear-gradient(180deg, #0f5663 0%, #16212b 100%);
+            background: linear-gradient(180deg, #1f547e 0%, #072f4e 100%);
             background-attachment: fixed;
+        }
+
+        /* Bright accent bar on the active/hover sidebar item */
+        .sidebar-menu > li.active > a,
+        .sidebar-menu > li:hover > a {
+            border-left-color: #2898ee !important;
         }
 
 
