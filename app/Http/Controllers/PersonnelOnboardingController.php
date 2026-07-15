@@ -31,13 +31,19 @@ class PersonnelOnboardingController extends Controller
             ->get();
     }
 
-    /** Accessories with at least one unit still available. */
+    /** Accessories offered on the onboarding form (matched by name). */
+    private const OFFERED_ACCESSORIES = ['Teclado Genius', 'Mouse USB', 'Base de portatil'];
+
+    /** The offered accessories that still have at least one unit available. */
     private function accessoriesInStock()
     {
+        $allowed = array_map('mb_strtolower', self::OFFERED_ACCESSORIES);
+
         return Accessory::withCount('checkouts')
             ->orderBy('name')
             ->get()
-            ->filter(fn ($a) => ($a->qty - $a->checkouts_count) > 0)
+            ->filter(fn ($a) => in_array(mb_strtolower(trim($a->name)), $allowed, true)
+                && ($a->qty - $a->checkouts_count) > 0)
             ->values();
     }
 
