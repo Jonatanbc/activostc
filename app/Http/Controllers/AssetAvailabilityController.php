@@ -45,8 +45,18 @@ class AssetAvailabilityController extends Controller
             ->get()
             ->groupBy('asset_id');
 
-        $rows = $assets->map(function (Asset $asset) use ($damages, $damageTypes, $criticalIds, $critTotal, $nonCritTotal) {
+        // Most recent journal note ("note added") per asset, if any.
+        $lastNotes = \App\Models\Actionlog::where('item_type', Asset::class)
+            ->where('action_type', 'note added')
+            ->whereIn('item_id', $assets->pluck('id'))
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'item_id', 'note', 'created_at'])
+            ->groupBy('item_id')
+            ->map(fn ($logs) => $logs->first());
+
+        $rows = $assets->map(function (Asset $asset) use ($damages, $lastNotes, $damageTypes, $criticalIds, $critTotal, $nonCritTotal) {
             $assetDamages = $damages->get($asset->id, collect());
+            $lastNote = $lastNotes->get($asset->id);
             $damagedTypeIds = $assetDamages->pluck('damage_type_id')->unique();
 
             $damagedCritIds = $damagedTypeIds->intersect($criticalIds);
@@ -90,6 +100,8 @@ class AssetAvailabilityController extends Controller
                 'damage_count' => $assetDamages->count(),
                 'asset_photo' => $assetPhoto,
                 'damage_photos' => $damagePhotos,
+                'last_note' => $lastNote?->note,
+                'last_note_at' => $lastNote?->created_at,
             ];
         });
 

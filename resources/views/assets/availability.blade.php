@@ -62,6 +62,7 @@
                                 <th class="sortable" data-type="text">{{ trans('general.location') }}<span class="sort-ind"></span></th>
                                 <th class="sortable" data-type="num" style="min-width:130px;">{{ trans('admin/damages/general.photos_col') }}<span class="sort-ind"></span></th>
                                 <th class="sortable text-right" data-type="num">{{ trans('admin/damages/general.repair_cost') }}<span class="sort-ind"></span></th>
+                                <th class="sortable" data-type="text" style="min-width:180px;">{{ trans('general.last_note') }}<span class="sort-ind"></span></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -74,7 +75,7 @@
                                     $labelClass = $row['estado'] === 'assignable' ? 'label-success' : ($row['estado'] === 'with_damage' ? 'label-warning' : 'label-danger');
                                 @endphp
                                 @php $categoryName = optional(optional($asset->model)->category)->name; @endphp
-                                <tr class="avail-row" data-search="{{ strtolower(($asset->asset_tag ?? '').' '.optional($asset->model)->name.' '.$asset->serial.' '.$asset->name.' '.$categoryName) }}">
+                                <tr class="avail-row" data-search="{{ strtolower(($asset->asset_tag ?? '').' '.optional($asset->model)->name.' '.$asset->serial.' '.$asset->name.' '.$categoryName.' '.strip_tags($row['last_note'] ?? '')) }}">
                                     <td data-sort="{{ strtolower($categoryName ?? '') }}">
                                         @if ($categoryName)
                                             <span class="cat-chip">{{ $categoryName }}</span>
@@ -136,6 +137,16 @@
                                     <td class="text-right" data-sort="{{ $row['repair_cost'] }}">
                                         {{ $row['repair_cost'] > 0 ? \App\Helpers\Helper::formatCurrencyOutput($row['repair_cost']) : '—' }}
                                     </td>
+                                    <td data-sort="{{ strtolower(strip_tags($row['last_note'] ?? '')) }}">
+                                        @if (!empty($row['last_note']))
+                                            <span class="avail-note" title="{{ strip_tags($row['last_note']) }}">{{ \Illuminate\Support\Str::limit(strip_tags($row['last_note']), 90) }}</span>
+                                            @if ($row['last_note_at'])
+                                                <span class="avail-note-date">{{ $row['last_note_at']->format('Y-m-d') }}</span>
+                                            @endif
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
                                     <td class="text-right">
                                         <button type="button" class="btn btn-primary btn-xs js-request"
                                                 data-asset-id="{{ $asset->id }}"
@@ -145,7 +156,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="11" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
+                                <tr><td colspan="12" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -242,6 +253,9 @@
     background: #eef1f5; border-radius: 12px; padding: 2px 10px;
 }
 [data-theme="dark"] .cat-chip { background: #333a45; color: #cfd6df; }
+.avail-note { display: block; font-size: 12px; color: #4a5568; line-height: 1.3; max-width: 260px; }
+.avail-note-date { display: block; font-size: 10.5px; color: #9aa5b1; margin-top: 2px; }
+[data-theme="dark"] .avail-note { color: #cfd6df; }
 .comp-chip {
     display: inline-block; font-size: 11.5px; font-weight: 600; color: #b23b3b;
     background: #fdecec; border: 1px solid #f5cccc; border-radius: 14px;
