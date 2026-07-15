@@ -36,6 +36,13 @@ return [
         ],
     ],
 
+    'Disponibilidad de equipos' => [
+        [
+            'permission' => 'equipos.availability',
+            'display' => true,
+        ],
+    ],
+
     'Assets' => [
         [
             'permission' => 'assets.view',

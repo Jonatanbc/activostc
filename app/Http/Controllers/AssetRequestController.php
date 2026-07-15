@@ -40,7 +40,7 @@ class AssetRequestController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('view', Asset::class);
+        $this->authorize('equipos.availability');
 
         $data = $request->validate([
             'asset_id' => 'required|integer|exists:assets,id',

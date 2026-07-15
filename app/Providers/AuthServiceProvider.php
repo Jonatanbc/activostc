@@ -199,6 +199,13 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         // -----------------------------------------
+        // Equipment availability module (view-only role)
+        // -----------------------------------------
+        Gate::define('equipos.availability', function ($user) {
+            return $user->hasAccess('equipos.availability');
+        });
+
+        // -----------------------------------------
         // Activity
         // -----------------------------------------
         Gate::define('activity.view', function ($user) {

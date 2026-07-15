@@ -52,6 +52,7 @@
                     <table class="table table-striped avail-table">
                         <thead>
                             <tr>
+                                <th>{{ trans('general.category') }}</th>
                                 <th>{{ trans('admin/hardware/table.asset_tag') }}</th>
                                 <th>{{ trans('general.asset_model') }}</th>
                                 <th>{{ trans('admin/hardware/form.serial') }}</th>
@@ -72,7 +73,15 @@
                                     $barClass = $row['estado'] === 'assignable' ? 'progress-bar-success' : ($row['estado'] === 'with_damage' ? 'progress-bar-warning' : 'progress-bar-danger');
                                     $labelClass = $row['estado'] === 'assignable' ? 'label-success' : ($row['estado'] === 'with_damage' ? 'label-warning' : 'label-danger');
                                 @endphp
-                                <tr class="avail-row" data-search="{{ strtolower(($asset->asset_tag ?? '').' '.optional($asset->model)->name.' '.$asset->serial.' '.$asset->name) }}">
+                                @php $categoryName = optional(optional($asset->model)->category)->name; @endphp
+                                <tr class="avail-row" data-search="{{ strtolower(($asset->asset_tag ?? '').' '.optional($asset->model)->name.' '.$asset->serial.' '.$asset->name.' '.$categoryName) }}">
+                                    <td>
+                                        @if ($categoryName)
+                                            <span class="label label-default">{{ $categoryName }}</span>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <a href="{{ route('hardware.show', $asset->id) }}">{{ $asset->asset_tag ?: '—' }}</a>
                                     </td>
@@ -136,7 +145,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr><td colspan="10" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
+                                <tr><td colspan="11" class="text-center text-muted" style="padding:24px;">{{ trans('admin/damages/general.no_available_assets') }}</td></tr>
                             @endforelse
                         </tbody>
                     </table>

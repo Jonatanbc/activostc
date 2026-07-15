@@ -1872,13 +1872,16 @@
                             </li>
                         @endcan
 
-                        @can('view', \App\Models\Asset::class)
+                        @can('equipos.availability')
                             <li{!! (request()->is('equipos-disponibilidad') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('assets.availability') }}">
                                     <i class="fa-solid fa-heart-pulse fa-fw"></i>
                                     <span>{{ trans('admin/damages/general.availability_module') }}</span>
                                 </a>
                             </li>
+                        @endcan
+
+                        @can('view', \App\Models\Asset::class)
                             <li{!! (request()->is('solicitudes-equipos') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('assets.requests') }}">
                                     <i class="fa-solid fa-hand-point-up fa-fw"></i>

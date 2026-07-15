@@ -14,7 +14,7 @@ class AssetAvailabilityController extends Controller
 {
     public function index()
     {
-        $this->authorize('view', Asset::class);
+        $this->authorize('equipos.availability');
 
         $damageTypes = DamageType::orderBy('name')->get();
         $criticalTypes = $damageTypes->where('is_critical', true);
@@ -34,7 +34,7 @@ class AssetAvailabilityController extends Controller
 
         $assets = Asset::whereNull('assets.assigned_to')
             ->whereIn('assets.status_id', $inventoryStatusIds->isEmpty() ? [0] : $inventoryStatusIds->all())
-            ->with(['model', 'location'])
+            ->with(['model.category', 'location'])
             ->orderBy('asset_tag')
             ->get();
 
