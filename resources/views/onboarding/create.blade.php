@@ -128,11 +128,26 @@
                         <div class="ob-grid">
                             @foreach ($platforms as $p)
                                 <label class="ob-check ob-check-platform">
-                                    <input type="checkbox" name="platforms[]" value="{{ $p }}"
+                                    <input type="checkbox" name="platforms[]" value="{{ $p }}" data-platform="{{ $p }}"
                                            {{ in_array($p, (array) old('platforms', []), true) ? 'checked' : '' }}>
                                     <span class="ob-check-name"><i class="fa-solid fa-cloud"></i> {{ $p }}</span>
                                 </label>
                             @endforeach
+                        </div>
+
+                        {{-- Sub-bloque: roles de OTM (solo si se marcó OTM) --}}
+                        <div id="otm_roles_wrap" class="ob-subblock ob-hidden">
+                            <label class="ob-label-sm"><i class="fa-solid fa-user-shield"></i> {{ trans('admin/onboarding/general.otm_roles') }}</label>
+                            <p class="ob-help">{{ trans('admin/onboarding/general.otm_roles_help') }}</p>
+                            <div class="ob-grid">
+                                @foreach ($otmRoles as $role)
+                                    <label class="ob-check">
+                                        <input type="checkbox" name="otm_roles[]" value="{{ $role }}"
+                                               {{ in_array($role, (array) old('otm_roles', []), true) ? 'checked' : '' }}>
+                                        <span class="ob-check-name">{{ $role }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
 
@@ -188,6 +203,8 @@
 .ob-check input { margin: 0; }
 .ob-check.is-selected { border-color: #3c8dbc; background: #f2f8fc; }
 .ob-check-name { flex: 1 1 auto; }
+.ob-subblock { margin-top: 14px; padding: 14px; border: 1px dashed #cfd8e3; border-radius: 10px; background: #f8fafc; animation: obFade .3s ease; }
+[data-theme="dark"] .ob-subblock { background: #262d37; border-color: #3d4756; }
 .ob-badge { font-size: 11px; font-weight: 600; color: #6b7c93; background: #eef1f5; border-radius: 10px; padding: 1px 8px; white-space: nowrap; }
 .ob-select { width: 100%; }
 [data-theme="dark"] .ob-label { color: #e5e9ef; }
@@ -307,6 +324,21 @@
             function sync() { cb.closest('.ob-check').classList.toggle('is-selected', cb.checked); }
             cb.addEventListener('change', sync); sync();
         });
+
+        // When OTM is requested, reveal its roles sub-block.
+        var otmWrap = document.getElementById('otm_roles_wrap');
+        var otmCheckbox = form.querySelector('input[data-platform="OTM"]');
+        function toggleOtmRoles() {
+            if (!otmWrap || !otmCheckbox) return;
+            otmWrap.classList.toggle('ob-hidden', !otmCheckbox.checked);
+            if (!otmCheckbox.checked) {
+                // Clear role selections when OTM is unchecked.
+                otmWrap.querySelectorAll('input[type="checkbox"]').forEach(function (c) {
+                    c.checked = false; c.closest('.ob-check').classList.remove('is-selected');
+                });
+            }
+        }
+        if (otmCheckbox) { otmCheckbox.addEventListener('change', toggleOtmRoles); toggleOtmRoles(); }
 
         // Restore state on validation error (old input).
         if (position.value.trim()) show('2');

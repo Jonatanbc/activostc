@@ -35,6 +35,9 @@ return [
 
     'platforms' => 'Platforms the user requires',
     'platforms_help' => 'Check the platforms access is needed for.',
+    'otm_roles' => 'OTM roles to assign',
+    'otm_roles_help' => 'Select one or more OTM roles for the user.',
+    'otm_roles_short' => 'OTM roles',
 
     'notes' => 'Notes',
     'notes_ph' => 'Any extra detail for IT…',

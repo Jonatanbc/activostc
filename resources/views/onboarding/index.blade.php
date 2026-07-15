@@ -94,13 +94,21 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @php $plats = $r->platforms ?? []; @endphp
+                                        @php $plats = $r->platforms ?? []; $otm = $r->otm_roles ?? []; @endphp
                                         @if (empty($plats))
                                             <span class="text-muted">{{ trans('admin/onboarding/general.none') }}</span>
                                         @else
                                             @foreach ($plats as $p)
                                                 <span class="label label-primary" style="display:inline-block;margin:1px;">{{ $p }}</span>
                                             @endforeach
+                                            @if (in_array('OTM', $plats, true) && !empty($otm))
+                                                <div style="margin-top:4px;">
+                                                    <small class="text-muted">{{ trans('admin/onboarding/general.otm_roles_short') }}:</small><br>
+                                                    @foreach ($otm as $role)
+                                                        <span class="label label-info" style="display:inline-block;margin:1px;">{{ $role }}</span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
                                         @endif
                                     </td>
                                     <td>

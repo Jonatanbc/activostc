@@ -35,6 +35,9 @@ return [
 
     'platforms' => 'Plataformas que requiere el usuario',
     'platforms_help' => 'Marque las plataformas a las que necesita acceso.',
+    'otm_roles' => 'Roles de OTM a asignar',
+    'otm_roles_help' => 'Seleccione uno o varios roles de OTM para el usuario.',
+    'otm_roles_short' => 'Roles OTM',
 
     'notes' => 'Observaciones',
     'notes_ph' => 'Cualquier detalle adicional para TI…',

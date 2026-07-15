@@ -37,6 +37,24 @@ class OnboardingRequest extends SnipeModel
     /** Platforms a new hire may need. Names are proper nouns (not translated). */
     public const PLATFORMS = ['OTM', 'ERP', 'PIT', 'Optopus', 'RNDC'];
 
+    /** OTM roles (only relevant when OTM is among the requested platforms). */
+    public const OTM_ROLES = [
+        'FACTURACION',
+        'DESPACHADOR_IMEX',
+        'DESPACHADOR_CEDIS',
+        'TIEMPOS_LOGITICOS',
+        'SUPER_DESPACHADOR_EMPA',
+        'USUARIO_EMPACOR',
+        'SUPER_DESPACHADOR',
+        'GERENTE',
+        'DESPACHADOR_IMEX_2',
+        'DESPACHADOR_NACIONAL',
+        'SAC',
+        'PLANEACION',
+        'TRAFICO',
+        'GESTOR_APROBACIONES',
+    ];
+
     protected $rules = [
         'position' => 'required|string|max:191',
         'employee_name' => 'required|string|max:191',
@@ -49,12 +67,13 @@ class OnboardingRequest extends SnipeModel
 
     protected $fillable = [
         'requested_by', 'position', 'employee_name', 'entry_type', 'replaces_user_id',
-        'asset_id', 'accessories', 'platforms', 'notes', 'status', 'processed_by', 'processed_at',
+        'asset_id', 'accessories', 'platforms', 'otm_roles', 'notes', 'status', 'processed_by', 'processed_at',
     ];
 
     protected $casts = [
         'accessories' => 'array',
         'platforms' => 'array',
+        'otm_roles' => 'array',
         'processed_at' => 'datetime',
     ];
 

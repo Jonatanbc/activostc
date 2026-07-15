@@ -52,7 +52,8 @@ class PersonnelOnboardingController extends Controller
             ->with('availableAssets', $this->availableAssets())
             ->with('accessories', $this->accessoriesInStock())
             ->with('users', User::whereNull('deleted_at')->orderBy('first_name')->get())
-            ->with('platforms', OnboardingRequest::PLATFORMS);
+            ->with('platforms', OnboardingRequest::PLATFORMS)
+            ->with('otmRoles', OnboardingRequest::OTM_ROLES);
     }
 
     /**
@@ -72,12 +73,19 @@ class PersonnelOnboardingController extends Controller
             'accessories.*' => 'integer|exists:accessories,id',
             'platforms' => 'nullable|array',
             'platforms.*' => 'string|in:'.implode(',', OnboardingRequest::PLATFORMS),
+            'otm_roles' => 'nullable|array',
+            'otm_roles.*' => 'string|in:'.implode(',', OnboardingRequest::OTM_ROLES),
             'notes' => 'nullable|string',
         ]);
 
         // Only a replacement carries a "replaces whom".
         if ($data['entry_type'] !== OnboardingRequest::ENTRY_REPLACEMENT) {
             $data['replaces_user_id'] = null;
+        }
+
+        // OTM roles only make sense if OTM is among the requested platforms.
+        if (! in_array('OTM', $data['platforms'] ?? [], true)) {
+            $data['otm_roles'] = null;
         }
 
         $onboarding = new OnboardingRequest($data);
