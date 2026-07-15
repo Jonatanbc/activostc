@@ -171,83 +171,6 @@
 
 @else
 
-<!-- recent activity -->
-<div class="row">
-  <div class="col-md-8">
-    <div class="box box-default">
-      <div class="box-header with-border">
-        <h2 class="box-title">{{ trans('general.recent_activity') }}</h2>
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-hidden="true">
-                <x-icon type="minus" />
-                <span class="sr-only">{{ trans('general.collapse') }}</span>
-            </button>
-        </div>
-      </div><!-- /.box-header -->
-      <div class="box-body">
-        <div class="row">
-          <div class="col-md-12">
-
-                <table
-                    data-cookie-id-table="dashActivityReport"
-                    data-height="500"
-                    data-pagination="false"
-                    data-side-pagination="server"
-                    data-id-table="dashActivityReport"
-                    data-sort-order="desc"
-                    data-show-columns="false"
-                    data-fixed-number="false"
-                    data-fixed-right-number="false"
-                    data-sort-name="created_at"
-                    id="dashActivityReport"
-                    class="table table-striped snipe-table"
-                    data-url="{{ route('api.activity.index', ['limit' => 25]) }}">
-                    <thead>
-                    <tr>
-                        <th data-field="icon" data-visible="true" style="width: 40px;" class="hidden-xs" data-formatter="iconFormatter"><span  class="sr-only">{{ trans('admin/hardware/table.icon') }}</span></th>
-                        <th class="col-sm-3" data-visible="true" data-field="created_at" data-formatter="dateDisplayFormatter">{{ trans('general.date') }}</th>
-                        <th class="col-sm-2" data-visible="true" data-field="admin" data-formatter="usersLinkObjFormatter">{{ trans('general.created_by') }}</th>
-                        <th class="col-sm-2" data-visible="true" data-field="action_type">{{ trans('general.action') }}</th>
-                        <th class="col-sm-3" data-visible="true" data-field="item" data-formatter="polymorphicItemFormatter">{{ trans('general.item') }}</th>
-                        <th class="col-sm-2" data-visible="true" data-field="target" data-formatter="polymorphicItemFormatter">{{ trans('general.target') }}</th>
-                    </tr>
-                    </thead>
-                </table>
-          </div><!-- /.col -->
-          <div class="text-center col-md-12" style="padding-top: 10px;">
-            <a href="{{ route('reports.activity') }}" class="btn btn-theme btn-sm" style="width: 100%">{{ trans('general.viewall') }}</a>
-          </div>
-        </div><!-- /.row -->
-      </div><!-- ./box-body -->
-    </div><!-- /.box -->
-  </div>
-  <div class="col-md-4">
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <h2 class="box-title">
-                    {{ (\App\Models\Setting::getSettings()->dash_chart_type == 'name') ? trans('general.assets_by_status') : trans('general.assets_by_status_type') }}
-                </h2>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-hidden="true">
-                        <x-icon type="minus" />
-                        <span class="sr-only">{{ trans('general.collapse') }}</span>
-                    </button>
-                </div>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="chart-responsive" style="position:relative; height:300px;">
-                            <canvas id="statusPieChart"></canvas>
-                        </div> <!-- ./chart-responsive -->
-                    </div> <!-- /.col -->
-                </div> <!-- /.row -->
-            </div><!-- /.box-body -->
-        </div> <!-- /.box -->
-  </div>
-
-</div> <!--/row-->
 <div class="row">
     <div class="col-md-6">
 
@@ -453,6 +376,84 @@
             </div><!-- /.box-body -->
         </div> <!-- /.box -->
     </div>
+</div> <!--/row-->
+
+<!-- recent activity -->
+<div class="row">
+  <div class="col-md-8">
+    <div class="box box-default">
+      <div class="box-header with-border">
+        <h2 class="box-title">{{ trans('general.recent_activity') }}</h2>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-hidden="true">
+                <x-icon type="minus" />
+                <span class="sr-only">{{ trans('general.collapse') }}</span>
+            </button>
+        </div>
+      </div><!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          <div class="col-md-12">
+
+                <table
+                    data-cookie-id-table="dashActivityReport"
+                    data-height="500"
+                    data-pagination="false"
+                    data-side-pagination="server"
+                    data-id-table="dashActivityReport"
+                    data-sort-order="desc"
+                    data-show-columns="false"
+                    data-fixed-number="false"
+                    data-fixed-right-number="false"
+                    data-sort-name="created_at"
+                    id="dashActivityReport"
+                    class="table table-striped snipe-table"
+                    data-url="{{ route('api.activity.index', ['limit' => 25]) }}">
+                    <thead>
+                    <tr>
+                        <th data-field="icon" data-visible="true" style="width: 40px;" class="hidden-xs" data-formatter="iconFormatter"><span  class="sr-only">{{ trans('admin/hardware/table.icon') }}</span></th>
+                        <th class="col-sm-3" data-visible="true" data-field="created_at" data-formatter="dateDisplayFormatter">{{ trans('general.date') }}</th>
+                        <th class="col-sm-2" data-visible="true" data-field="admin" data-formatter="usersLinkObjFormatter">{{ trans('general.created_by') }}</th>
+                        <th class="col-sm-2" data-visible="true" data-field="action_type">{{ trans('general.action') }}</th>
+                        <th class="col-sm-3" data-visible="true" data-field="item" data-formatter="polymorphicItemFormatter">{{ trans('general.item') }}</th>
+                        <th class="col-sm-2" data-visible="true" data-field="target" data-formatter="polymorphicItemFormatter">{{ trans('general.target') }}</th>
+                    </tr>
+                    </thead>
+                </table>
+          </div><!-- /.col -->
+          <div class="text-center col-md-12" style="padding-top: 10px;">
+            <a href="{{ route('reports.activity') }}" class="btn btn-theme btn-sm" style="width: 100%">{{ trans('general.viewall') }}</a>
+          </div>
+        </div><!-- /.row -->
+      </div><!-- ./box-body -->
+    </div><!-- /.box -->
+  </div>
+  <div class="col-md-4">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h2 class="box-title">
+                    {{ (\App\Models\Setting::getSettings()->dash_chart_type == 'name') ? trans('general.assets_by_status') : trans('general.assets_by_status_type') }}
+                </h2>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse" aria-hidden="true">
+                        <x-icon type="minus" />
+                        <span class="sr-only">{{ trans('general.collapse') }}</span>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-responsive" style="position:relative; height:300px;">
+                            <canvas id="statusPieChart"></canvas>
+                        </div> <!-- ./chart-responsive -->
+                    </div> <!-- /.col -->
+                </div> <!-- /.row -->
+            </div><!-- /.box-body -->
+        </div> <!-- /.box -->
+  </div>
+</div> <!--/row-->
 
 
 @endif
