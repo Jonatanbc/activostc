@@ -72,7 +72,7 @@
             --main-footer-bg-color: light-dark(#ffffff,#3d4144);
             --main-footer-text-color: light-dark(#605e5e, #d2d6de);
             --main-footer-top-border-color: light-dark(#d2d6de,#605e5e);
-            --main-theme-color: {{ $snipeSettings->header_color ?? '#3c8dbc' }};
+            --main-theme-color: #0f7d8e; /* azul turquí — reemplaza el negro de header_color */
             --nav-hover-text-color: {{ $nav_link_color ?? 'hsl(from var(--main-theme-color) h s calc(l - 10))' }};
             --nav-primary-text-color: {{ $nav_link_color ?? '#ffffff' }};
             --search-highlight: #e9d15b;
@@ -210,6 +210,20 @@
 
         .btn-theme:focus {
             color: var(--nav-primary-text-color) !important;
+        }
+
+        /* Primary buttons follow the turquoise theme (were AdminLTE blue) */
+        .btn-primary {
+            background-color: var(--main-theme-color) !important;
+            border-color: hsl(from var(--main-theme-color) h s calc(l - 8)) !important;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active,
+        .btn-primary.active,
+        .open > .dropdown-toggle.btn-primary {
+            background-color: var(--main-theme-hover) !important;
+            border-color: hsl(from var(--main-theme-color) h s calc(l - 14)) !important;
         }
 
 
@@ -725,7 +739,8 @@
          */
 
         .main-sidebar {
-            background-color: #1e282c;
+            background: linear-gradient(180deg, #0f5663 0%, #16212b 100%);
+            background-attachment: fixed;
         }
 
 
@@ -746,12 +761,12 @@
 
 
         .sidebar-menu > li:hover {
-            background-color: #2c3b41;
+            background-color: rgba(255, 255, 255, .08);
         }
 
         .sidebar-menu>li>.treeview-menu
         {
-            background-color: #1e282c;
+            background-color: rgba(0, 0, 0, .18);
         }
 
 
@@ -769,7 +784,7 @@
         .sidebar-menu > li.active > a,
         .sidebar-menu > li:hover > a
         {
-            background-color: #1e282c;
+            background-color: rgba(255, 255, 255, .10);
             border-left-color: var(--main-theme-color);
             border-left-style: solid;
             border-left-width: 3px;
