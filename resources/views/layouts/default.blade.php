@@ -789,7 +789,7 @@
 
         .sidebar-menu>li>.treeview-menu
         {
-            background-color: rgba(0, 0, 0, .18);
+            background-color: #072f4e !important;
         }
 
 
