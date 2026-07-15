@@ -1245,6 +1245,12 @@
                                         <span>{{ trans('admin/damages/general.availability_module') }}</span>
                                     </a>
                                 </li>
+                                <li{!! (request()->is('ingreso-personal') ? ' class="active"' : '') !!}>
+                                    <a href="{{ route('onboarding.create') }}">
+                                        <i class="fa-solid fa-user-plus fa-fw"></i>
+                                        <span>{{ trans('admin/onboarding/general.module_menu') }}</span>
+                                    </a>
+                                </li>
                             </ul>
                         @endcan
                     </div>
@@ -1889,6 +1895,12 @@
                                     <span>{{ trans('admin/damages/general.availability_module') }}</span>
                                 </a>
                             </li>
+                            <li{!! (request()->is('ingreso-personal') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('onboarding.create') }}">
+                                    <i class="fa-solid fa-user-plus fa-fw"></i>
+                                    <span>{{ trans('admin/onboarding/general.module_menu') }}</span>
+                                </a>
+                            </li>
                         @endcan
 
                         @can('view', \App\Models\Asset::class)
@@ -1896,6 +1908,12 @@
                                 <a href="{{ route('assets.requests') }}">
                                     <i class="fa-solid fa-hand-point-up fa-fw"></i>
                                     <span>{{ trans('admin/damages/general.requests_module') }}</span>
+                                </a>
+                            </li>
+                            <li{!! (request()->is('solicitudes-ingreso') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('onboarding.index') }}">
+                                    <i class="fa-solid fa-clipboard-user fa-fw"></i>
+                                    <span>{{ trans('admin/onboarding/general.management_menu') }}</span>
                                 </a>
                             </li>
                             <li{!! (request()->is('damages-list') ? ' class="active"' : '') !!}>

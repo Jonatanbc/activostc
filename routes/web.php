@@ -149,6 +149,31 @@ Route::group(['middleware' => 'auth'], function () {
         ->name('assets.requests.destroy');
 
     /*
+    * Personnel onboarding ("Gestión de ingreso del personal"): wizard + IT review
+    */
+    Route::get('ingreso-personal', [\App\Http\Controllers\PersonnelOnboardingController::class, 'create'])
+        ->name('onboarding.create')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/onboarding/general.module_title'), route('onboarding.create')));
+
+    Route::post('ingreso-personal', [\App\Http\Controllers\PersonnelOnboardingController::class, 'store'])
+        ->name('onboarding.store');
+
+    Route::get('ingreso-personal/usuario-equipos/{user}', [\App\Http\Controllers\PersonnelOnboardingController::class, 'userAssets'])
+        ->name('onboarding.user-assets');
+
+    Route::get('solicitudes-ingreso', [\App\Http\Controllers\PersonnelOnboardingController::class, 'index'])
+        ->name('onboarding.index')
+        ->breadcrumbs(fn (Trail $trail) => $trail->parent('home')
+            ->push(trans('admin/onboarding/general.management_title'), route('onboarding.index')));
+
+    Route::patch('solicitudes-ingreso/{onboarding}/estado', [\App\Http\Controllers\PersonnelOnboardingController::class, 'updateStatus'])
+        ->name('onboarding.status');
+
+    Route::delete('solicitudes-ingreso/{onboarding}', [\App\Http\Controllers\PersonnelOnboardingController::class, 'destroy'])
+        ->name('onboarding.destroy');
+
+    /*
     * Purchase requests (group damages -> request a quotation)
     */
     Route::get('purchase-requests', [\App\Http\Controllers\PurchaseRequestsController::class, 'index'])
