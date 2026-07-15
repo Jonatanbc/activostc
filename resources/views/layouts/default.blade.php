@@ -738,6 +738,23 @@
         Active and hover for top tier sidenav items
          */
 
+        /* Top bar in dark navy (#072f4e), independent of the theme color */
+        .main-header .navbar,
+        .navbar,
+        .navbar-nav,
+        .navbar-nav > li > a:link,
+        .navbar-nav > li > a:visited {
+            background-color: #072f4e !important;
+        }
+        .navbar-nav > li > a:hover,
+        .navbar-nav > li > a:focus,
+        .navbar-nav .open > a,
+        .navbar-nav .open > a:hover,
+        .navbar-nav .open > a:focus,
+        .main-header .navbar .nav > .active > a {
+            background-color: #0a3d63 !important;
+        }
+
         .main-sidebar {
             background: linear-gradient(180deg, #1f547e 0%, #072f4e 100%);
             background-attachment: fixed;
