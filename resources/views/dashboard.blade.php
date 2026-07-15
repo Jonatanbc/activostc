@@ -238,8 +238,8 @@
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="chart-responsive">
-                            <canvas id="statusPieChart" height="260"></canvas>
+                        <div class="chart-responsive" style="position:relative; height:300px;">
+                            <canvas id="statusPieChart"></canvas>
                         </div> <!-- ./chart-responsive -->
                     </div> <!-- /.col -->
                 </div> <!-- /.row -->
@@ -601,25 +601,30 @@
     // ---------------------------
     // - ASSET STATUS CHART -
     // ---------------------------
-      var pieChartCanvas = $("#statusPieChart").get(0).getContext("2d");
-      var pieChart = new Chart(pieChartCanvas);
       var ctx = document.getElementById("statusPieChart");
-      var pieOptions = {
-              legend: {
-                  position: 'top',
-                  responsive: true,
-                  maintainAspectRatio: true,
+      var barOptions = {
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: { display: false },
+              scales: {
+                  xAxes: [{
+                      ticks: { beginAtZero: true, precision: 0, fontColor: '#8a94a6' },
+                      gridLines: { color: 'rgba(148,163,184,.18)', zeroLineColor: 'rgba(148,163,184,.35)', drawBorder: false }
+                  }],
+                  yAxes: [{
+                      gridLines: { display: false, drawBorder: false },
+                      ticks: { fontColor: '#6b7c93', fontStyle: '600' }
+                  }]
               },
               tooltips: {
                 callbacks: {
                     label: function(tooltipItem, data) {
-                        counts = data.datasets[0].data;
-                        total = 0;
-                        for(var i in counts) {
-                            total += counts[i];
-                        }
-                        prefix = data.labels[tooltipItem.index] || '';
-                        return prefix+" "+Math.round(counts[tooltipItem.index]/total*100)+"%";
+                        var counts = data.datasets[0].data;
+                        var total = 0;
+                        for (var i in counts) { total += (counts[i] || 0); }
+                        var v = counts[tooltipItem.index] || 0;
+                        var pct = total ? Math.round(v / total * 100) : 0;
+                        return ' ' + v + ' (' + pct + '%)';
                     }
                 }
               }
@@ -634,10 +639,27 @@
           },
           dataType: 'json',
           success: function (data) {
-              var myPieChart = new Chart(ctx,{
-                  type   : 'pie',
-                  data   : data,
-                  options: pieOptions
+              // Sort states by count (desc) so the largest bar is on top.
+              var ds = (data.datasets && data.datasets[0]) || { data: [] };
+              var bg = ds.backgroundColor || [];
+              var rows = (data.labels || []).map(function (label, i) {
+                  return { label: label, value: ds.data[i] || 0, color: Array.isArray(bg) ? bg[i] : bg };
+              }).sort(function (a, b) { return b.value - a.value; });
+
+              var chartData = {
+                  labels: rows.map(function (r) { return r.label; }),
+                  datasets: [{
+                      data: rows.map(function (r) { return r.value; }),
+                      backgroundColor: rows.map(function (r) { return r.color; }),
+                      borderWidth: 0,
+                      maxBarThickness: 24
+                  }]
+              };
+
+              new Chart(ctx, {
+                  type   : 'horizontalBar',
+                  data   : chartData,
+                  options: barOptions
               });
           },
           error: function (data) {
