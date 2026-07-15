@@ -1237,6 +1237,16 @@
                                 </a>
                             @endif
                         </div>
+                        @can('equipos.availability')
+                            <ul class="nav navbar-nav top-availability-menu hidden-xs">
+                                <li{!! (request()->is('equipos-disponibilidad') ? ' class="active"' : '') !!}>
+                                    <a href="{{ route('assets.availability') }}">
+                                        <i class="fa-solid fa-heart-pulse fa-fw"></i>
+                                        <span>{{ trans('admin/damages/general.availability_module') }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endcan
                     </div>
 
                     <!-- Navbar Right Menu -->
