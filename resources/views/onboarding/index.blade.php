@@ -162,4 +162,26 @@
         </div>
     </div>
 </div>
+
+@push('css')
+<style>
+.box.box-default { border-radius: 16px; box-shadow: 0 10px 28px -14px rgba(31,41,55,.16), 0 2px 5px rgba(31,41,55,.04); border: 1px solid #e7ebf3; }
+.box.box-default > .box-header.with-border { border-bottom: 1px solid #eef1f6; padding: 18px 22px; }
+.box.box-default > .box-header .box-title { font-weight: 700; }
+.nav-tabs { border-bottom: 1px solid #eef1f6; }
+.nav-tabs > li > a { border: none; border-radius: 20px; padding: 6px 16px; color: #6b7c93; font-weight: 600; margin-right: 4px; }
+.nav-tabs > li > a:hover { background: #eef2ff; color: #4f7cff; }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    background: linear-gradient(135deg, #4f7cff, #6a5cff); color: #fff; border: none;
+}
+.nav-tabs > li > a .badge { background: rgba(0,0,0,.12); color: inherit; }
+.nav-tabs > li.active > a .badge { background: rgba(255,255,255,.25); }
+.table > thead > tr > th { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #9aa5b1; border-bottom: 2px solid #eef1f6; }
+.table > tbody > tr > td { vertical-align: middle; }
+.label { border-radius: 20px; font-weight: 600; padding: .3em .7em; }
+[data-theme="dark"] .box.box-default { background: #232830; border-color: #3a4453; }
+[data-theme="dark"] .nav-tabs, [data-theme="dark"] .box.box-default > .box-header.with-border { border-bottom-color: #333b47; }
+[data-theme="dark"] .nav-tabs > li > a:hover { background: #232c46; }
+</style>
+@endpush
 @stop
