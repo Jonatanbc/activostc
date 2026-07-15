@@ -756,14 +756,7 @@
         }
 
         .main-sidebar {
-            background: linear-gradient(180deg, #1f547e 0%, #072f4e 100%);
-            background-attachment: fixed;
-        }
-
-        /* Bright accent bar on the active/hover sidebar item */
-        .sidebar-menu > li.active > a,
-        .sidebar-menu > li:hover > a {
-            border-left-color: #2898ee !important;
+            background: #072f4e;
         }
 
 
@@ -784,12 +777,22 @@
 
 
         .sidebar-menu > li:hover {
-            background-color: rgba(255, 255, 255, .08);
+            background-color: #12557f !important;
         }
 
+        /* Submenu (treeview) container: slightly darker navy for separation */
         .sidebar-menu>li>.treeview-menu
         {
-            background-color: #072f4e !important;
+            background-color: #05263f !important;
+        }
+        /* Submenu items: readable light text on navy */
+        .sidebar-menu .treeview-menu > li > a {
+            color: #c3d3e3 !important;
+        }
+        .sidebar-menu .treeview-menu > li.active > a,
+        .sidebar-menu .treeview-menu > li > a:hover {
+            background-color: #12557f !important;
+            color: #ffffff !important;
         }
 
 
@@ -807,11 +810,11 @@
         .sidebar-menu > li.active > a,
         .sidebar-menu > li:hover > a
         {
-            background-color: rgba(255, 255, 255, .10);
-            border-left-color: var(--main-theme-color);
+            background-color: #12557f !important;
+            border-left-color: #2898ee !important;
             border-left-style: solid;
             border-left-width: 3px;
-            color: var(--sidenav-text-hover-color) !important;
+            color: #ffffff !important;
         }
 
         thead,
