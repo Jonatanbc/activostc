@@ -25,14 +25,16 @@ class AssetAvailabilityController extends Controller
         $nonCritTotal = max(1.0, (float) $nonCriticalTypes->sum(fn ($t) => (float) $t->default_cost));
         $criticalIds = $criticalTypes->pluck('id')->all();
 
-        // Equipment in TI inventory: not assigned to anyone, in a deployable or
-        // pending status (excludes archived/stolen). Broader than RTD so damaged
-        // units under evaluation still show up.
+        // Equipment offered for request: only assets explicitly flagged as
+        // requestable ("puede solicitarse"), not assigned to anyone, in a
+        // deployable or pending status (excludes archived/stolen). Broader than
+        // RTD so damaged units under evaluation still show up.
         $inventoryStatusIds = \App\Models\Statuslabel::whereNull('deleted_at')
             ->where(fn ($q) => $q->where('deployable', 1)->orWhere('pending', 1))
             ->pluck('id');
 
-        $assets = Asset::whereNull('assets.assigned_to')
+        $assets = Asset::where('assets.requestable', 1)
+            ->whereNull('assets.assigned_to')
             ->whereIn('assets.status_id', $inventoryStatusIds->isEmpty() ? [0] : $inventoryStatusIds->all())
             ->with(['model.category', 'location'])
             ->orderBy('asset_tag')
