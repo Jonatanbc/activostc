@@ -67,9 +67,10 @@ class SecurityHeaders
 
         if (config('app.allow_iframing') == false) {
             // The damages module edits a record inside a same-origin modal iframe.
-            // Allow SAMEORIGIN framing only for that specific route+flag; everything
-            // else keeps the stricter DENY (no cross-origin clickjacking exposure).
-            if (($request->is('damages/*/edit') || $request->is('damages/create')) && $request->boolean('modal')) {
+            // Allow SAMEORIGIN framing only for the damages routes with the modal flag
+            // (the form GET *and* the store/update POST/PUT, whose "modal-done" response
+            // also renders inside the iframe); everything else keeps the stricter DENY.
+            if ($request->is('damages', 'damages/*') && $request->boolean('modal')) {
                 $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
             } else {
                 $response->headers->set('X-Frame-Options', 'DENY');
